@@ -8,7 +8,7 @@ If you discover a security vulnerability within ContextGraph OS, please report i
 
 ### How to Report
 
-1. Go to the [Security tab](https://github.com/akz4ol/contextgraph-os/security) of this repository
+1. Go to the [Security tab](https://github.com/akz4ol/contextgraph-os-core/security) of this repository
 2. Click "Report a vulnerability"
 3. Provide detailed information about the vulnerability
 

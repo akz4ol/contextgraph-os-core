@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://github.com/akz4ol/contextgraph-os#readme
+    url: https://github.com/akz4ol/contextgraph-os-core#readme
     about: Check the documentation before opening an issue
   - name: Discussions
-    url: https://github.com/akz4ol/contextgraph-os/discussions
+    url: https://github.com/akz4ol/contextgraph-os-core/discussions
     about: Ask questions and discuss ideas in GitHub Discussions
   - name: Security Issues
-    url: https://github.com/akz4ol/contextgraph-os/security/policy
+    url: https://github.com/akz4ol/contextgraph-os-core/security/policy
     about: Report security vulnerabilities privately via our security policy

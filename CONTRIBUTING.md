@@ -34,7 +34,7 @@ git clone https://github.com/YOUR_USERNAME/contextgraph-os.git
 cd contextgraph-os
 
 # Add upstream remote
-git remote add upstream https://github.com/akz4ol/contextgraph-os.git
+git remote add upstream https://github.com/akz4ol/contextgraph-os-core.git
 
 # Create a feature branch
 git checkout -b feature/your-feature-name
@@ -119,7 +119,7 @@ src/
 
 ## Getting Help
 
-- Open a [Discussion](https://github.com/akz4ol/contextgraph-os/discussions)
+- Open a [Discussion](https://github.com/akz4ol/contextgraph-os-core/discussions)
 - Check existing issues and discussions
 - Read the documentation
 

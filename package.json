@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akz4ol/contextgraph-os.git"
+    "url": "git+https://github.com/akz4ol/contextgraph-os-core.git"
   },
   "keywords": [
     "context-graph",
@@ -59,9 +59,9 @@
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/akz4ol/contextgraph-os/issues"
+    "url": "https://github.com/akz4ol/contextgraph-os-core/issues"
   },
-  "homepage": "https://github.com/akz4ol/contextgraph-os#readme",
+  "homepage": "https://github.com/akz4ol/contextgraph-os-core#readme",
   "engines": {
     "node": ">=18.0.0"
   },
