@@ -127,11 +127,11 @@ export interface ArtifactPayload extends BasePayload {
   /** Content hash for integrity */
   readonly contentHash: string;
   /** Location/URI of the artifact */
-  readonly location?: string;
+  readonly location?: string | undefined;
   /** Size in bytes */
-  readonly size?: number;
+  readonly size?: number | undefined;
   /** MIME type */
-  readonly mimeType?: string;
+  readonly mimeType?: string | undefined;
 }
 
 /**
@@ -186,7 +186,7 @@ export interface ValidityWindow {
   /** When this node became valid */
   readonly validFrom: Timestamp;
   /** When this node ceased to be valid (undefined = still valid) */
-  readonly validUntil?: Timestamp;
+  readonly validUntil?: Timestamp | undefined;
 }
 
 /**

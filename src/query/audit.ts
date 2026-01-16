@@ -133,8 +133,8 @@ export interface DecisionAuditEntry {
   readonly state: string;
   readonly proposedBy: ContentAddress;
   readonly proposedAt: Timestamp;
-  readonly concludedAt?: Timestamp;
-  readonly verdict?: string;
+  readonly concludedAt?: Timestamp | undefined;
+  readonly verdict?: string | undefined;
   readonly violationCount: number;
 }
 
@@ -180,7 +180,7 @@ export interface ActorAuditEntry {
   readonly actionCount: number;
   readonly approvalCount: number;
   readonly violationCount: number;
-  readonly lastActiveAt?: Timestamp;
+  readonly lastActiveAt?: Timestamp | undefined;
 }
 
 /**
@@ -202,9 +202,9 @@ export interface ApprovalAuditEntry {
   readonly decisionId: ContentAddress;
   readonly status: string;
   readonly requestedAt: Timestamp;
-  readonly resolvedAt?: Timestamp;
-  readonly responseTimeMs?: number;
-  readonly decidedBy?: ContentAddress;
+  readonly resolvedAt?: Timestamp | undefined;
+  readonly responseTimeMs?: number | undefined;
+  readonly decidedBy?: ContentAddress | undefined;
 }
 
 /**

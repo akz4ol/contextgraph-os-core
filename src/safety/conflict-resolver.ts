@@ -9,7 +9,7 @@
  */
 
 import type { ContentAddress } from '../core/identity/content-address.js';
-import type { PolicyDefinition, EnforcementAction } from '../policy/schema.js';
+import type { PolicyDefinition, EnforcementModeValue } from '../policy/schema.js';
 import type { DecisionAction } from '../decision/lifecycle.js';
 import { computeContentAddress } from '../core/identity/content-address.js';
 
@@ -416,8 +416,8 @@ export class ConflictResolver {
 
   private isContradiction(p1: PolicyDefinition, p2: PolicyDefinition): boolean {
     // BLOCK vs ALLOW/ANNOTATE
-    const restrictive: EnforcementAction[] = ['BLOCK', 'ESCALATE'];
-    const permissive: EnforcementAction[] = ['ANNOTATE'];
+    const restrictive: EnforcementModeValue[] = ['BLOCK', 'ESCALATE'];
+    const permissive: EnforcementModeValue[] = ['ANNOTATE'];
 
     return (
       (restrictive.includes(p1.enforcement) && permissive.includes(p2.enforcement)) ||
@@ -430,8 +430,8 @@ export class ConflictResolver {
   }
 
   private hasAmbiguousPriority(p1: PolicyDefinition, p2: PolicyDefinition): boolean {
-    const priority1 = p1.metadata?.priority ?? 0;
-    const priority2 = p2.metadata?.priority ?? 0;
+    const priority1 = (p1.metadata?.['priority'] as number | undefined) ?? 0;
+    const priority2 = (p2.metadata?.['priority'] as number | undefined) ?? 0;
     return priority1 === priority2 && this.isOverlapConflict(p1, p2);
   }
 
@@ -501,7 +501,7 @@ export class ConflictResolver {
   }
 
   private resolveByRestrictiveness(conflict: PolicyConflict): ResolutionResult {
-    const enforcementOrder: EnforcementAction[] = ['BLOCK', 'ESCALATE', 'ANNOTATE', 'SHADOW'];
+    const enforcementOrder: EnforcementModeValue[] = ['BLOCK', 'ESCALATE', 'ANNOTATE', 'SHADOW'];
 
     const winner = [...conflict.policies].sort((a, b) => {
       const indexA = enforcementOrder.indexOf(a.enforcement);
@@ -528,7 +528,7 @@ export class ConflictResolver {
   }
 
   private resolveByPermissiveness(conflict: PolicyConflict): ResolutionResult {
-    const enforcementOrder: EnforcementAction[] = ['SHADOW', 'ANNOTATE', 'ESCALATE', 'BLOCK'];
+    const enforcementOrder: EnforcementModeValue[] = ['SHADOW', 'ANNOTATE', 'ESCALATE', 'BLOCK'];
 
     const winner = [...conflict.policies].sort((a, b) => {
       const indexA = enforcementOrder.indexOf(a.enforcement);
@@ -556,8 +556,8 @@ export class ConflictResolver {
 
   private resolveByPriority(conflict: PolicyConflict): ResolutionResult {
     const winner = [...conflict.policies].sort((a, b) => {
-      const priorityA = (a.metadata?.priority as number) ?? 0;
-      const priorityB = (b.metadata?.priority as number) ?? 0;
+      const priorityA = (a.metadata?.['priority'] as number | undefined) ?? 0;
+      const priorityB = (b.metadata?.['priority'] as number | undefined) ?? 0;
       return priorityB - priorityA;
     })[0];
 
@@ -581,8 +581,8 @@ export class ConflictResolver {
 
   private resolveByNewest(conflict: PolicyConflict): ResolutionResult {
     const winner = [...conflict.policies].sort((a, b) => {
-      const dateA = (a.metadata?.createdAt as string) ?? '';
-      const dateB = (b.metadata?.createdAt as string) ?? '';
+      const dateA = (a.metadata?.['createdAt'] as string | undefined) ?? '';
+      const dateB = (b.metadata?.['createdAt'] as string | undefined) ?? '';
       return dateB.localeCompare(dateA);
     })[0];
 

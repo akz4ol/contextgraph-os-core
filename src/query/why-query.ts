@@ -10,13 +10,17 @@
 
 import type { ContentAddress } from '../core/identity/content-address.js';
 import type { Timestamp } from '../core/time/temporal.js';
-import type { ContextNode, DecisionNode, ArtifactNode } from '../core/types/node.js';
+import type { GraphNode, ContextPayload } from '../core/types/node.js';
 import type { Decision } from '../decision/lifecycle.js';
 import type { Alternative } from '../decision/alternatives.js';
 import type { PolicyDefinition } from '../policy/schema.js';
-import type { DecisionVerdict, PolicyViolation } from '../policy/evaluator.js';
+import type { DecisionVerdict } from '../policy/evaluator.js';
 import type { Actor } from '../actor/identity.js';
-import type { TraceResult, TraceNode } from '../provenance/backward-trace.js';
+
+/**
+ * Context node type alias for convenience
+ */
+type ContextNode = GraphNode<ContextPayload>;
 
 /**
  * Why query result
@@ -137,7 +141,7 @@ export interface AlternativeReference {
   /** What the alternative was */
   readonly description: string;
   /** Why it wasn't chosen */
-  readonly rejectionReason?: string;
+  readonly rejectionReason?: string | undefined;
 }
 
 /**
@@ -354,7 +358,7 @@ export class WhyQueryEngine {
    */
   getDecisionContext(decisionId: ContentAddress): {
     decision: Decision;
-    verdict?: DecisionVerdict;
+    verdict?: DecisionVerdict | undefined;
     contexts: readonly ContextNode[];
     actors: readonly Actor[];
     alternatives: readonly Alternative[];
@@ -545,7 +549,7 @@ export class WhyQueryEngine {
     decision: Decision,
     verdict: DecisionVerdict | undefined,
     contexts: ContextReference[],
-    policies: PolicyReference[]
+    _policies: PolicyReference[]
   ): string {
     const parts: string[] = [];
 

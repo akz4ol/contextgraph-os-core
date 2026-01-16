@@ -9,7 +9,7 @@
  */
 
 import type { ContentAddress } from '../core/identity/content-address.js';
-import type { Decision, DecisionAction, DecisionContextRef } from '../decision/lifecycle.js';
+import type { DecisionAction, DecisionContextRef } from '../decision/lifecycle.js';
 
 /**
  * Validation severity

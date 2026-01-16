@@ -9,7 +9,7 @@
  */
 
 import type { ContentAddress } from '../src/core/identity/content-address.js';
-import type { PolicyDefinition, EnforcementAction, PolicyScope } from '../src/policy/schema.js';
+import type { PolicyDefinition } from '../src/policy/schema.js';
 import { ConflictResolver } from '../src/safety/conflict-resolver.js';
 
 /**
@@ -124,20 +124,20 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     },
   },
   {
-    id: 'no-empty-conditions',
-    name: 'No Empty Conditions',
-    description: 'Policies should have at least one condition',
+    id: 'no-empty-rule',
+    name: 'No Empty Rule',
+    description: 'Policies should have a non-empty rule expression',
     severity: LintSeverity.WARNING,
     category: 'structure',
     check: (policy) => {
-      if (!policy.conditions || policy.conditions.length === 0) {
+      if (!policy.rule || !policy.rule.expression || policy.rule.expression.trim() === '') {
         return [{
-          ruleId: 'no-empty-conditions',
+          ruleId: 'no-empty-rule',
           severity: LintSeverity.WARNING,
           policyId: policy.id,
           policyName: policy.name,
-          message: 'Policy has no conditions and will match everything',
-          suggestion: 'Add conditions to limit the policy scope',
+          message: 'Policy has no rule expression and will match everything',
+          suggestion: 'Add a rule expression to define policy behavior',
         }];
       }
       return [];
@@ -169,22 +169,22 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
   {
     id: 'no-global-allow',
     name: 'No Global Allow',
-    description: 'Avoid global ANNOTATE/SHADOW policies without conditions',
+    description: 'Avoid global ANNOTATE/SHADOW policies without scope conditions',
     severity: LintSeverity.WARNING,
     category: 'security',
     check: (policy) => {
       const isGlobal = policy.scope.type === 'GLOBAL' || policy.scope.pattern === '*';
       const isPermissive = policy.enforcement === 'ANNOTATE' || policy.enforcement === 'SHADOW';
-      const hasNoConditions = !policy.conditions || policy.conditions.length === 0;
+      const hasNoScopeConditions = !policy.scope.conditions || Object.keys(policy.scope.conditions).length === 0;
 
-      if (isGlobal && isPermissive && hasNoConditions) {
+      if (isGlobal && isPermissive && hasNoScopeConditions) {
         return [{
           ruleId: 'no-global-allow',
           severity: LintSeverity.WARNING,
           policyId: policy.id,
           policyName: policy.name,
-          message: 'Global permissive policy without conditions may be too broad',
-          suggestion: 'Add conditions or narrow the scope',
+          message: 'Global permissive policy without scope conditions may be too broad',
+          suggestion: 'Add scope conditions or narrow the scope pattern',
         }];
       }
       return [];

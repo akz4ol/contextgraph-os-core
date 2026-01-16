@@ -9,8 +9,13 @@
 
 import type { ContentAddress } from '../core/identity/content-address.js';
 import type { Timestamp } from '../core/time/temporal.js';
-import type { ArtifactNode, ArtifactPayload } from '../core/types/node.js';
+import type { GraphNode, ArtifactPayload } from '../core/types/node.js';
 import { computeContentAddress } from '../core/identity/content-address.js';
+
+/**
+ * Artifact node type alias for convenience
+ */
+type ArtifactNode = GraphNode<ArtifactPayload>;
 
 /**
  * Artifact type
@@ -45,17 +50,17 @@ export interface RegisterArtifactInput {
   /** Content or reference to content */
   readonly content: string | object;
   /** MIME type */
-  readonly mimeType?: string;
+  readonly mimeType?: string | undefined;
   /** File path (if applicable) */
-  readonly filePath?: string;
+  readonly filePath?: string | undefined;
   /** Decision that produced this artifact */
   readonly producedByDecisionId: ContentAddress;
   /** Description */
-  readonly description?: string;
+  readonly description?: string | undefined;
   /** Tags for categorization */
-  readonly tags?: readonly string[];
+  readonly tags?: readonly string[] | undefined;
   /** Metadata */
-  readonly metadata?: Record<string, unknown>;
+  readonly metadata?: Record<string, unknown> | undefined;
 }
 
 /**
@@ -357,10 +362,11 @@ export class ArtifactAPI {
   toArtifactNode(artifact: RegisteredArtifact): ArtifactNode {
     const payload: ArtifactPayload = {
       schemaVersion: '1.0',
+      artifactType: artifact.type,
       contentHash: artifact.contentHash,
       mimeType: artifact.mimeType,
-      ...(artifact.filePath !== undefined && { filePath: artifact.filePath }),
-      metadata: artifact.metadata,
+      location: artifact.filePath,
+      size: artifact.sizeBytes,
     };
 
     return {
@@ -368,6 +374,10 @@ export class ArtifactAPI {
       type: 'ARTIFACT',
       createdAt: artifact.registeredAt,
       createdBy: artifact.registeredBy,
+      status: 'ACTIVE',
+      validity: {
+        validFrom: artifact.registeredAt,
+      },
       payload,
     };
   }

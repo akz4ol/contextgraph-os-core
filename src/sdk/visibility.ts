@@ -10,7 +10,7 @@
 
 import type { ContentAddress } from '../core/identity/content-address.js';
 import type { Actor } from '../actor/identity.js';
-import type { AuthorityChecker, AuthorityLevelValue, AuthorityLevel } from '../actor/authority.js';
+import type { AuthorityChecker, AuthorityLevelValue } from '../actor/authority.js';
 import type { DeclaredContext } from './context-api.js';
 import type { PolicyFeedback } from './decision-api.js';
 

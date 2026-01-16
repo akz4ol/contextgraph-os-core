@@ -11,8 +11,6 @@
 
 import type { ContentAddress } from '../core/identity/content-address.js';
 import type { Timestamp } from '../core/time/temporal.js';
-import type { Decision } from '../decision/lifecycle.js';
-import type { Actor } from '../actor/identity.js';
 import { computeContentAddress } from '../core/identity/content-address.js';
 
 /**

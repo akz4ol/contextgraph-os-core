@@ -126,11 +126,18 @@ export interface DecisionEvaluator {
 export class DecisionAPI {
   private proposals: Map<string, Proposal> = new Map();
   private proposalCounter = 0;
-  private currentActorId: ContentAddress;
+  private actorId: ContentAddress;
   private evaluator?: DecisionEvaluator;
 
   constructor(actorId: ContentAddress) {
-    this.currentActorId = actorId;
+    this.actorId = actorId;
+  }
+
+  /**
+   * Get the actor ID for this API instance
+   */
+  getActorId(): ContentAddress {
+    return this.actorId;
   }
 
   /**
@@ -261,7 +268,7 @@ export class DecisionAPI {
   /**
    * Submit a proposal for evaluation
    */
-  async submit(proposalId: string, options: SubmitOptions = {}): Promise<ProposalResult> {
+  async submit(proposalId: string, _options: SubmitOptions = {}): Promise<ProposalResult> {
     const proposal = this.proposals.get(proposalId);
     if (!proposal) {
       throw new Error(`Proposal not found: ${proposalId}`);
@@ -428,9 +435,9 @@ export class DecisionAPI {
     if (verdict.annotations) {
       for (const annotation of verdict.annotations) {
         feedback.push({
-          policyId: annotation.addedBy,
+          policyId: verdict.decisionId, // Use decision ID as source
           type: 'info',
-          message: `Annotation: ${annotation.key} = ${String(annotation.value)}`,
+          message: annotation,
         });
       }
     }

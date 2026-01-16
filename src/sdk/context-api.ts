@@ -9,9 +9,13 @@
 
 import type { ContentAddress } from '../core/identity/content-address.js';
 import type { Timestamp } from '../core/time/temporal.js';
-import type { ContextNode, ContextPayload } from '../core/types/node.js';
-import type { Actor } from '../actor/identity.js';
+import type { GraphNode, ContextPayload } from '../core/types/node.js';
 import { computeContentAddress } from '../core/identity/content-address.js';
+
+/**
+ * Context node type alias for convenience
+ */
+type ContextNode = GraphNode<ContextPayload>;
 
 /**
  * Context type for the SDK
@@ -46,13 +50,13 @@ export interface DeclareContextInput<T = unknown> {
   /** Source of the context */
   readonly source: string;
   /** Confidence level (0-1) */
-  readonly confidence?: number;
+  readonly confidence?: number | undefined;
   /** Tags for categorization */
-  readonly tags?: readonly string[];
+  readonly tags?: readonly string[] | undefined;
   /** Time-to-live in milliseconds */
-  readonly ttlMs?: number;
+  readonly ttlMs?: number | undefined;
   /** Parent context (if derived) */
-  readonly parentId?: ContentAddress;
+  readonly parentId?: ContentAddress | undefined;
 }
 
 /**
@@ -441,10 +445,13 @@ export class ContextAPI {
   toContextNode(context: DeclaredContext): ContextNode {
     const payload: ContextPayload = {
       schemaVersion: '1.0',
-      contextType: context.type,
-      data: context.data as Record<string, unknown>,
       source: context.source,
-      ...(context.confidence !== 1.0 && { confidence: context.confidence }),
+      data: context.data,
+      contentType: 'application/json',
+      metadata: {
+        contextType: context.type,
+        confidence: context.confidence,
+      },
     };
 
     return {
@@ -452,6 +459,11 @@ export class ContextAPI {
       type: 'CONTEXT',
       createdAt: context.declaredAt,
       createdBy: context.declaredBy,
+      status: 'ACTIVE',
+      validity: {
+        validFrom: context.declaredAt,
+        validUntil: context.expiresAt,
+      },
       payload,
     };
   }

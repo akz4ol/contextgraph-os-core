@@ -373,13 +373,23 @@ export class PolicyEvaluator {
     }
 
     const evaluatedAt = new Date().toISOString();
+    const violations: PolicyViolation[] = policyResults
+      .filter((pr) => !pr.verdict.passed)
+      .map((pr) => ({
+        policyId: pr.policyId,
+        message: pr.verdict.explanation,
+        severity: pr.verdict.enforcement === 'BLOCK' ? 'critical' as const : 'warning' as const,
+      }));
+
     const verdictData = {
       decisionId: context.decision.id,
       result,
+      scope: context.decision.type,
       policyResults,
       blockingPolicies,
       escalatingPolicies,
       annotations: allAnnotations,
+      violations,
       evaluatedAt,
       evaluationTimeMs: Date.now() - startTime,
     };

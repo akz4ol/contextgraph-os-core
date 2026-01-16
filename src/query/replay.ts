@@ -352,10 +352,17 @@ export class ReplayEngine {
 
     // Default mock verdict if no evaluator is set
     return {
+      id: computeContentAddress({ mock: true, timestamp: Date.now() }),
+      decisionId: computeContentAddress(action),
       result: 'ALLOW',
       scope: '*',
+      policyResults: [],
+      blockingPolicies: [],
+      escalatingPolicies: [],
+      annotations: [],
       violations: [],
       evaluatedAt: new Date().toISOString(),
+      evaluationTimeMs: 0,
     };
   }
 
