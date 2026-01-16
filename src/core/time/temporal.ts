@@ -178,11 +178,23 @@ export function pastRange(duration: {
   minutes?: number;
 }): TimeRange {
   const to = now();
-  const from = addDuration(to, {
-    days: duration.days ? -duration.days : undefined,
-    hours: duration.hours ? -duration.hours : undefined,
-    minutes: duration.minutes ? -duration.minutes : undefined,
-  });
+  const negativeDuration: {
+    days?: number;
+    hours?: number;
+    minutes?: number;
+  } = {};
+
+  if (duration.days !== undefined) {
+    negativeDuration.days = -duration.days;
+  }
+  if (duration.hours !== undefined) {
+    negativeDuration.hours = -duration.hours;
+  }
+  if (duration.minutes !== undefined) {
+    negativeDuration.minutes = -duration.minutes;
+  }
+
+  const from = addDuration(to, negativeDuration);
 
   return { from, to };
 }

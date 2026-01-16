@@ -153,9 +153,15 @@ export class InMemoryEventStore implements EventStore {
 
     const id = computeContentAddress(eventData);
 
+    // Build event object, only including optional fields if they exist
     const event: StoredEvent<T> = {
       id,
-      ...eventData,
+      type: input.type,
+      payload: input.payload,
+      timestamp,
+      sequence: this.sequence,
+      ...(input.correlationId !== undefined && { correlationId: input.correlationId }),
+      ...(input.causationId !== undefined && { causationId: input.causationId }),
     };
 
     this.events.push(event as StoredEvent);
@@ -212,7 +218,13 @@ export class InMemoryEventStore implements EventStore {
     callback: (event: StoredEvent) => void | Promise<void>,
     options?: { types?: readonly EventTypeValue[] }
   ): () => void {
-    const subscriber = { callback, types: options?.types };
+    const subscriber: {
+      callback: (event: StoredEvent) => void | Promise<void>;
+      types?: readonly EventTypeValue[];
+    } =
+      options?.types !== undefined
+        ? { callback, types: options.types }
+        : { callback };
     this.subscribers.push(subscriber);
 
     // Return unsubscribe function

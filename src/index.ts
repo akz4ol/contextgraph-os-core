@@ -12,5 +12,11 @@ export * from './core/index.js';
 // Graph engine exports
 export * from './graph/index.js';
 
+// Provenance & Lineage exports
+export * from './provenance/index.js';
+
+// Policy Engine exports
+export * from './policy/index.js';
+
 // Version
 export const VERSION = '0.1.0';
