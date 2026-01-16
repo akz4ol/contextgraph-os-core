@@ -344,18 +344,13 @@ export class AuditCLI {
       return null;
     }
 
-    const lines: string[] = [
-      `audit ${command.name} - ${command.description}`,
-      '',
-      'Options:',
-    ];
+    const lines: string[] = [`audit ${command.name} - ${command.description}`, '', 'Options:'];
 
     for (const option of command.options) {
       const aliasStr = option.alias ? `, ${option.alias}` : '';
       const requiredStr = option.required ? ' (required)' : '';
-      const defaultStr = option.defaultValue !== undefined
-        ? ` [default: ${String(option.defaultValue)}]`
-        : '';
+      const defaultStr =
+        option.defaultValue !== undefined ? ` [default: ${String(option.defaultValue)}]` : '';
       lines.push(
         `  ${option.name}${aliasStr}${requiredStr}${defaultStr}`,
         `      ${option.description}`,

@@ -41,7 +41,10 @@ export interface LintRule {
   /** Category */
   readonly category: 'structure' | 'security' | 'performance' | 'best-practice' | 'conflict';
   /** Check function */
-  readonly check: (policy: PolicyDefinition, allPolicies: readonly PolicyDefinition[]) => LintIssue[];
+  readonly check: (
+    policy: PolicyDefinition,
+    allPolicies: readonly PolicyDefinition[]
+  ) => LintIssue[];
 }
 
 /**
@@ -111,14 +114,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     category: 'structure',
     check: (policy) => {
       if (!policy.name || policy.name.trim() === '') {
-        return [{
-          ruleId: 'no-empty-name',
-          severity: LintSeverity.ERROR,
-          policyId: policy.id,
-          policyName: policy.name || '<unnamed>',
-          message: 'Policy name is empty',
-          suggestion: 'Provide a descriptive name for the policy',
-        }];
+        return [
+          {
+            ruleId: 'no-empty-name',
+            severity: LintSeverity.ERROR,
+            policyId: policy.id,
+            policyName: policy.name || '<unnamed>',
+            message: 'Policy name is empty',
+            suggestion: 'Provide a descriptive name for the policy',
+          },
+        ];
       }
       return [];
     },
@@ -131,14 +136,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     category: 'structure',
     check: (policy) => {
       if (!policy.rule || !policy.rule.expression || policy.rule.expression.trim() === '') {
-        return [{
-          ruleId: 'no-empty-rule',
-          severity: LintSeverity.WARNING,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: 'Policy has no rule expression and will match everything',
-          suggestion: 'Add a rule expression to define policy behavior',
-        }];
+        return [
+          {
+            ruleId: 'no-empty-rule',
+            severity: LintSeverity.WARNING,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: 'Policy has no rule expression and will match everything',
+            suggestion: 'Add a rule expression to define policy behavior',
+          },
+        ];
       }
       return [];
     },
@@ -152,14 +159,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     check: (policy) => {
       const pattern = policy.scope.pattern;
       if (pattern && pattern.includes('**')) {
-        return [{
-          ruleId: 'valid-scope-pattern',
-          severity: LintSeverity.ERROR,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: 'Invalid scope pattern: double wildcards not supported',
-          suggestion: 'Use single wildcard (*) for matching',
-        }];
+        return [
+          {
+            ruleId: 'valid-scope-pattern',
+            severity: LintSeverity.ERROR,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: 'Invalid scope pattern: double wildcards not supported',
+            suggestion: 'Use single wildcard (*) for matching',
+          },
+        ];
       }
       return [];
     },
@@ -175,17 +184,20 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     check: (policy) => {
       const isGlobal = policy.scope.type === 'GLOBAL' || policy.scope.pattern === '*';
       const isPermissive = policy.enforcement === 'ANNOTATE' || policy.enforcement === 'SHADOW';
-      const hasNoScopeConditions = !policy.scope.conditions || Object.keys(policy.scope.conditions).length === 0;
+      const hasNoScopeConditions =
+        !policy.scope.conditions || Object.keys(policy.scope.conditions).length === 0;
 
       if (isGlobal && isPermissive && hasNoScopeConditions) {
-        return [{
-          ruleId: 'no-global-allow',
-          severity: LintSeverity.WARNING,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: 'Global permissive policy without scope conditions may be too broad',
-          suggestion: 'Add scope conditions or narrow the scope pattern',
-        }];
+        return [
+          {
+            ruleId: 'no-global-allow',
+            severity: LintSeverity.WARNING,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: 'Global permissive policy without scope conditions may be too broad',
+            suggestion: 'Add scope conditions or narrow the scope pattern',
+          },
+        ];
       }
       return [];
     },
@@ -203,14 +215,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
       const isRestrictive = policy.enforcement === 'BLOCK' || policy.enforcement === 'ESCALATE';
 
       if (isSensitive && !isRestrictive) {
-        return [{
-          ruleId: 'sensitive-scope-requires-escalate',
-          severity: LintSeverity.WARNING,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: `Sensitive scope "${scope}" should use BLOCK or ESCALATE enforcement`,
-          suggestion: 'Change enforcement to ESCALATE or BLOCK',
-        }];
+        return [
+          {
+            ruleId: 'sensitive-scope-requires-escalate',
+            severity: LintSeverity.WARNING,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: `Sensitive scope "${scope}" should use BLOCK or ESCALATE enforcement`,
+            suggestion: 'Change enforcement to ESCALATE or BLOCK',
+          },
+        ];
       }
       return [];
     },
@@ -225,14 +239,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     category: 'best-practice',
     check: (policy) => {
       if (!policy.description || policy.description.trim() === '') {
-        return [{
-          ruleId: 'description-recommended',
-          severity: LintSeverity.INFO,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: 'Policy has no description',
-          suggestion: 'Add a description explaining the policy purpose',
-        }];
+        return [
+          {
+            ruleId: 'description-recommended',
+            severity: LintSeverity.INFO,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: 'Policy has no description',
+            suggestion: 'Add a description explaining the policy purpose',
+          },
+        ];
       }
       return [];
     },
@@ -245,14 +261,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
     category: 'best-practice',
     check: (policy) => {
       if (!policy.version) {
-        return [{
-          ruleId: 'version-recommended',
-          severity: LintSeverity.INFO,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: 'Policy has no version',
-          suggestion: 'Add a version for tracking changes',
-        }];
+        return [
+          {
+            ruleId: 'version-recommended',
+            severity: LintSeverity.INFO,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: 'Policy has no version',
+            suggestion: 'Add a version for tracking changes',
+          },
+        ];
       }
       return [];
     },
@@ -271,14 +289,16 @@ export const DEFAULT_LINT_RULES: readonly LintRule[] = [
       const wildcardCount = parts.filter((p) => p === '*').length;
 
       if (wildcardCount > 2) {
-        return [{
-          ruleId: 'overly-broad-scope',
-          severity: LintSeverity.INFO,
-          policyId: policy.id,
-          policyName: policy.name,
-          message: `Scope pattern "${pattern}" has ${wildcardCount} wildcards`,
-          suggestion: 'Consider narrowing the scope for better performance',
-        }];
+        return [
+          {
+            ruleId: 'overly-broad-scope',
+            severity: LintSeverity.INFO,
+            policyId: policy.id,
+            policyName: policy.name,
+            message: `Scope pattern "${pattern}" has ${wildcardCount} wildcards`,
+            suggestion: 'Consider narrowing the scope for better performance',
+          },
+        ];
       }
       return [];
     },
@@ -323,7 +343,10 @@ export class PolicyLinter {
   /**
    * Lint a single policy
    */
-  lintPolicy(policy: PolicyDefinition, allPolicies: readonly PolicyDefinition[] = []): readonly LintIssue[] {
+  lintPolicy(
+    policy: PolicyDefinition,
+    allPolicies: readonly PolicyDefinition[] = []
+  ): readonly LintIssue[] {
     const issues: LintIssue[] = [];
 
     for (const [ruleId, rule] of this.rules) {
@@ -354,9 +377,7 @@ export class PolicyLinter {
     // Upgrade warnings to errors if configured
     if (this.config.warningsAsErrors) {
       return issues.map((issue) =>
-        issue.severity === LintSeverity.WARNING
-          ? { ...issue, severity: LintSeverity.ERROR }
-          : issue
+        issue.severity === LintSeverity.WARNING ? { ...issue, severity: LintSeverity.ERROR } : issue
       );
     }
 
@@ -416,8 +437,7 @@ export class PolicyLinter {
       for (const [key, issues] of byPolicy) {
         lines.push(`\n${key}`);
         for (const issue of issues) {
-          const icon = issue.severity === 'error' ? '✖' :
-                       issue.severity === 'warning' ? '⚠' : 'ℹ';
+          const icon = issue.severity === 'error' ? '✖' : issue.severity === 'warning' ? '⚠' : 'ℹ';
           lines.push(`  ${icon} ${issue.message} (${issue.ruleId})`);
           if (verbose && issue.suggestion) {
             lines.push(`    → ${issue.suggestion}`);
@@ -449,36 +469,49 @@ export class PolicyLinter {
    */
   formatResultSARIF(result: LintResult): string {
     const sarif = {
-      $schema: 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+      $schema:
+        'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
       version: '2.1.0',
-      runs: [{
-        tool: {
-          driver: {
-            name: 'ContextGraph Policy Linter',
-            version: '0.1.0',
-            rules: Array.from(this.rules.values()).map((rule) => ({
-              id: rule.id,
-              name: rule.name,
-              shortDescription: { text: rule.description },
-              defaultConfiguration: {
-                level: rule.severity === 'error' ? 'error' :
-                       rule.severity === 'warning' ? 'warning' : 'note',
-              },
-            })),
-          },
-        },
-        results: result.issues.map((issue) => ({
-          ruleId: issue.ruleId,
-          level: issue.severity === 'error' ? 'error' :
-                 issue.severity === 'warning' ? 'warning' : 'note',
-          message: { text: issue.message },
-          locations: [{
-            physicalLocation: {
-              artifactLocation: { uri: `policy/${issue.policyId}` },
+      runs: [
+        {
+          tool: {
+            driver: {
+              name: 'ContextGraph Policy Linter',
+              version: '0.1.0',
+              rules: Array.from(this.rules.values()).map((rule) => ({
+                id: rule.id,
+                name: rule.name,
+                shortDescription: { text: rule.description },
+                defaultConfiguration: {
+                  level:
+                    rule.severity === 'error'
+                      ? 'error'
+                      : rule.severity === 'warning'
+                        ? 'warning'
+                        : 'note',
+                },
+              })),
             },
-          }],
-        })),
-      }],
+          },
+          results: result.issues.map((issue) => ({
+            ruleId: issue.ruleId,
+            level:
+              issue.severity === 'error'
+                ? 'error'
+                : issue.severity === 'warning'
+                  ? 'warning'
+                  : 'note',
+            message: { text: issue.message },
+            locations: [
+              {
+                physicalLocation: {
+                  artifactLocation: { uri: `policy/${issue.policyId}` },
+                },
+              },
+            ],
+          })),
+        },
+      ],
     };
 
     return JSON.stringify(sarif, null, 2);
@@ -548,8 +581,7 @@ export function createPolicyLinter(config?: LintConfig): PolicyLinter {
 export async function main(argv: string[]): Promise<number> {
   // Parse arguments
   const verbose = argv.includes('--verbose') || argv.includes('-v');
-  const format = argv.includes('--json') ? 'json' :
-                 argv.includes('--sarif') ? 'sarif' : 'text';
+  const format = argv.includes('--json') ? 'json' : argv.includes('--sarif') ? 'sarif' : 'text';
   const warningsAsErrors = argv.includes('--strict');
 
   // In a real implementation, would load policies from files
