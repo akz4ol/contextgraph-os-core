@@ -115,6 +115,8 @@ export interface ActivationWindow {
  * Complete policy definition
  */
 export interface PolicyDefinition {
+  /** Unique policy ID (content-addressed) */
+  readonly id: ContentAddress;
   /** Human-readable policy name */
   readonly name: string;
   /** Detailed description of what this policy enforces */

@@ -21,6 +21,23 @@ import type {
 import { isPolicyActive } from './schema.js';
 
 /**
+ * Verdict result type
+ */
+export type VerdictResult = 'ALLOW' | 'DENY' | 'ESCALATE' | 'ANNOTATE';
+
+/**
+ * Policy violation record
+ */
+export interface PolicyViolation {
+  /** Policy that was violated */
+  readonly policyId: ContentAddress;
+  /** Violation message */
+  readonly message: string;
+  /** Severity level */
+  readonly severity: 'info' | 'warning' | 'error' | 'critical';
+}
+
+/**
  * Result of evaluating a single policy
  */
 export interface PolicyVerdictResult {
@@ -45,7 +62,9 @@ export interface DecisionVerdict {
   /** The decision being evaluated */
   readonly decisionId: ContentAddress;
   /** Overall result */
-  readonly result: 'ALLOW' | 'DENY' | 'ESCALATE' | 'ANNOTATE';
+  readonly result: VerdictResult;
+  /** Scope that was evaluated */
+  readonly scope: string;
   /** Individual policy results */
   readonly policyResults: readonly PolicyVerdictEntry[];
   /** Policies that blocked the decision */
@@ -54,6 +73,8 @@ export interface DecisionVerdict {
   readonly escalatingPolicies: readonly ContentAddress[];
   /** All annotations from policies */
   readonly annotations: readonly string[];
+  /** Policy violations found */
+  readonly violations: readonly PolicyViolation[];
   /** Timestamp of evaluation */
   readonly evaluatedAt: Timestamp;
   /** Time taken to evaluate (ms) */
