@@ -146,10 +146,12 @@ export function verifyContentAddress(
     return false;
   }
 
-  const computedAddress = computeContentAddress(content, {
-    algorithm: parsed.algorithm as HashAlgorithmValue,
-    truncateLength: config?.truncateLength,
-  });
+  const verifyConfig: ContentAddressConfig =
+    config?.truncateLength !== undefined
+      ? { algorithm: parsed.algorithm as HashAlgorithmValue, truncateLength: config.truncateLength }
+      : { algorithm: parsed.algorithm as HashAlgorithmValue };
+
+  const computedAddress = computeContentAddress(content, verifyConfig);
 
   return computedAddress === address;
 }
