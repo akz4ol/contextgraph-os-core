@@ -4,3 +4,4 @@ coverage
 cli
 jest.config.ts
 tests
+examples
