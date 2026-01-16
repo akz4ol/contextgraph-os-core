@@ -139,9 +139,10 @@ export class ArtifactAPI {
     const id = computeContentAddress(artifactData);
 
     // Determine size
-    const sizeBytes = typeof input.content === 'string'
-      ? Buffer.byteLength(input.content, 'utf8')
-      : Buffer.byteLength(JSON.stringify(input.content), 'utf8');
+    const sizeBytes =
+      typeof input.content === 'string'
+        ? Buffer.byteLength(input.content, 'utf8')
+        : Buffer.byteLength(JSON.stringify(input.content), 'utf8');
 
     // Default MIME type based on artifact type
     const defaultMimeTypes: Record<ArtifactTypeValue, string> = {
@@ -220,7 +221,7 @@ export class ArtifactAPI {
     return this.register({
       type: ArtifactType.CODE,
       content: code,
-      mimeType: options?.language ? mimeTypes[options.language] ?? 'text/plain' : 'text/plain',
+      mimeType: options?.language ? (mimeTypes[options.language] ?? 'text/plain') : 'text/plain',
       producedByDecisionId: decisionId,
       filePath: options?.filePath,
       description: options?.description,
@@ -278,11 +279,7 @@ export class ArtifactAPI {
   /**
    * Register a log artifact
    */
-  registerLog(
-    log: string,
-    decisionId: ContentAddress,
-    description?: string
-  ): RegisteredArtifact {
+  registerLog(log: string, decisionId: ContentAddress, description?: string): RegisteredArtifact {
     return this.register({
       type: ArtifactType.LOG,
       content: log,
@@ -326,9 +323,7 @@ export class ArtifactAPI {
 
     // Apply tag filter
     if (options.tags && options.tags.length > 0) {
-      results = results.filter((a) =>
-        options.tags!.some((tag) => a.tags.includes(tag))
-      );
+      results = results.filter((a) => options.tags!.some((tag) => a.tags.includes(tag)));
     }
 
     // Sort by registration time (newest first)

@@ -221,10 +221,7 @@ export class ActorRegistry {
   /**
    * Update actor authorities
    */
-  async updateAuthorities(
-    actorId: ContentAddress,
-    authorities: readonly string[]
-  ): Promise<Actor> {
+  async updateAuthorities(actorId: ContentAddress, authorities: readonly string[]): Promise<Actor> {
     const actor = this.actors.get(actorId);
     if (!actor) {
       throw new Error(`Actor not found: ${actorId}`);

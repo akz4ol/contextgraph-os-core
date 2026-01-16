@@ -164,9 +164,8 @@ export class ContextAPI {
     };
 
     // Calculate expiry if TTL is set
-    const expiresAt = input.ttlMs !== undefined
-      ? new Date(Date.now() + input.ttlMs).toISOString()
-      : undefined;
+    const expiresAt =
+      input.ttlMs !== undefined ? new Date(Date.now() + input.ttlMs).toISOString() : undefined;
 
     const context: DeclaredContext<T> = {
       ...baseContext,
@@ -250,7 +249,9 @@ export class ContextAPI {
    */
   get<T = unknown>(id: ContentAddress): DeclaredContext<T> | undefined {
     const context = this.contexts.get(id);
-    if (!context) {return undefined;}
+    if (!context) {
+      return undefined;
+    }
 
     // Check expiry
     if (context.expiresAt && context.expiresAt < new Date().toISOString()) {

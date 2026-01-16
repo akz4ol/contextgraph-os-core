@@ -174,9 +174,10 @@ export class DecisionStateMachine {
       proposedAt,
     };
 
-    const decisionData = input.rationale !== undefined
-      ? { ...baseDecisionData, rationale: input.rationale }
-      : baseDecisionData;
+    const decisionData =
+      input.rationale !== undefined
+        ? { ...baseDecisionData, rationale: input.rationale }
+        : baseDecisionData;
 
     const id = computeContentAddress(decisionData);
 
@@ -260,7 +261,10 @@ export class DecisionStateMachine {
 
       return committedDecision;
     } catch (error) {
-      await this.rollbackTransaction(txn.id, error instanceof Error ? error.message : 'Unknown error');
+      await this.rollbackTransaction(
+        txn.id,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
       throw error;
     }
   }
@@ -285,9 +289,8 @@ export class DecisionStateMachine {
     };
 
     const newRationale = reason ?? decision.rationale;
-    const rejectedDecision: Decision = newRationale !== undefined
-      ? { ...baseRejected, rationale: newRationale }
-      : baseRejected;
+    const rejectedDecision: Decision =
+      newRationale !== undefined ? { ...baseRejected, rationale: newRationale } : baseRejected;
 
     this.decisions.set(decisionId, rejectedDecision);
     return rejectedDecision;
@@ -312,9 +315,10 @@ export class DecisionStateMachine {
 
     const decidedAt = new Date().toISOString();
 
-    const approval: DecisionApproval = justification !== undefined
-      ? { decidedBy: approvedBy, decision: 'approved', justification, decidedAt }
-      : { decidedBy: approvedBy, decision: 'approved', decidedAt };
+    const approval: DecisionApproval =
+      justification !== undefined
+        ? { decidedBy: approvedBy, decision: 'approved', justification, decidedAt }
+        : { decidedBy: approvedBy, decision: 'approved', decidedAt };
 
     const approvedDecision: Decision = {
       ...decision,
@@ -346,9 +350,8 @@ export class DecisionStateMachine {
     };
 
     const newRationale = reason ?? decision.rationale;
-    const cancelledDecision: Decision = newRationale !== undefined
-      ? { ...baseCancelled, rationale: newRationale }
-      : baseCancelled;
+    const cancelledDecision: Decision =
+      newRationale !== undefined ? { ...baseCancelled, rationale: newRationale } : baseCancelled;
 
     this.decisions.set(decisionId, cancelledDecision);
     return cancelledDecision;
@@ -460,10 +463,13 @@ export function canCommit(decision: Decision): boolean {
  */
 export function toDecisionPayload(decision: Decision): DecisionPayload {
   const lifecycle: DecisionPayload['lifecycle'] =
-    decision.state === 'COMMITTED' ? 'COMMITTED' :
-    decision.state === 'REJECTED' ? 'REJECTED' :
-    decision.state === 'EVALUATED' || decision.state === 'PENDING_APPROVAL' ? 'EVALUATED' :
-    'PROPOSED';
+    decision.state === 'COMMITTED'
+      ? 'COMMITTED'
+      : decision.state === 'REJECTED'
+        ? 'REJECTED'
+        : decision.state === 'EVALUATED' || decision.state === 'PENDING_APPROVAL'
+          ? 'EVALUATED'
+          : 'PROPOSED';
 
   const basePayload = {
     schemaVersion: '1.0' as const,

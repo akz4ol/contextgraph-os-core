@@ -232,7 +232,10 @@ export class WhyQueryEngine {
   /**
    * Query: "Why was this artifact created?"
    */
-  whyArtifact(artifactId: ContentAddress, producingDecisionId: ContentAddress): WhyQueryResult | null {
+  whyArtifact(
+    artifactId: ContentAddress,
+    producingDecisionId: ContentAddress
+  ): WhyQueryResult | null {
     const decision = this.decisions.get(producingDecisionId);
     if (!decision) {
       return null;
@@ -256,10 +259,7 @@ export class WhyQueryEngine {
   /**
    * Query: "Why was this policy violated?"
    */
-  whyViolation(
-    decisionId: ContentAddress,
-    violationIndex: number
-  ): WhyQueryResult | null {
+  whyViolation(decisionId: ContentAddress, violationIndex: number): WhyQueryResult | null {
     const verdict = this.verdicts.get(decisionId);
     if (!verdict || !verdict.violations[violationIndex]) {
       return null;
@@ -302,12 +302,14 @@ export class WhyQueryEngine {
       steps: [policyNode],
       outcome,
       contexts: this.buildContextReferences(decision),
-      policies: [{
-        id: violation.policyId,
-        name: violation.policyId, // Would need policy lookup
-        application: 'blocked',
-        matchedClauses: [violation.message],
-      }],
+      policies: [
+        {
+          id: violation.policyId,
+          name: violation.policyId, // Would need policy lookup
+          application: 'blocked',
+          matchedClauses: [violation.message],
+        },
+      ],
       actors: this.buildActorReferences(decision),
       alternatives: [],
     };
@@ -495,16 +497,23 @@ export class WhyQueryEngine {
     const seenPolicies = new Set<ContentAddress>();
 
     for (const violation of verdict.violations) {
-      if (seenPolicies.has(violation.policyId)) {continue;}
+      if (seenPolicies.has(violation.policyId)) {
+        continue;
+      }
       seenPolicies.add(violation.policyId);
 
       const policy = this.policies.get(violation.policyId);
       policyRefs.push({
         id: violation.policyId,
         name: policy?.name ?? violation.policyId,
-        application: verdict.result === 'DENY' ? 'blocked' :
-                     verdict.result === 'ESCALATE' ? 'escalated' :
-                     verdict.result === 'ANNOTATE' ? 'annotated' : 'allowed',
+        application:
+          verdict.result === 'DENY'
+            ? 'blocked'
+            : verdict.result === 'ESCALATE'
+              ? 'escalated'
+              : verdict.result === 'ANNOTATE'
+                ? 'annotated'
+                : 'allowed',
         matchedClauses: [violation.message],
       });
     }

@@ -96,7 +96,10 @@ export interface ActionRequirementProfile {
   /** Minimum number of context references */
   readonly minContexts?: number;
   /** Custom validation function */
-  readonly customValidator?: (action: DecisionAction, contexts: readonly ContextInfo[]) => ContextValidationIssue[];
+  readonly customValidator?: (
+    action: DecisionAction,
+    contexts: readonly ContextInfo[]
+  ) => ContextValidationIssue[];
 }
 
 /**

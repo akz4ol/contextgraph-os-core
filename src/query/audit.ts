@@ -505,7 +505,9 @@ export class AuditEngine {
 
     for (const decision of decisions) {
       const verdict = this.verdicts.get(decision.id);
-      if (!verdict) {continue;}
+      if (!verdict) {
+        continue;
+      }
 
       for (const v of verdict.violations) {
         byPolicy[v.policyId] = (byPolicy[v.policyId] ?? 0) + 1;
@@ -537,11 +539,14 @@ export class AuditEngine {
   }
 
   private buildActorsSection(decisions: Decision[]): AuditSection {
-    const actorStats: Map<ContentAddress, {
-      actionCount: number;
-      approvalCount: number;
-      violationCount: number;
-    }> = new Map();
+    const actorStats: Map<
+      ContentAddress,
+      {
+        actionCount: number;
+        approvalCount: number;
+        violationCount: number;
+      }
+    > = new Map();
 
     const byActorType: Record<string, number> = {};
 
@@ -641,10 +646,7 @@ export class AuditEngine {
     };
   }
 
-  private buildTimelineSection(
-    decisions: Decision[],
-    approvals: ApprovalRequest[]
-  ): AuditSection {
+  private buildTimelineSection(decisions: Decision[], approvals: ApprovalRequest[]): AuditSection {
     const events: TimelineEvent[] = [];
 
     for (const decision of decisions) {
@@ -701,10 +703,7 @@ export class AuditEngine {
     };
   }
 
-  private buildMetricsSection(
-    decisions: Decision[],
-    approvals: ApprovalRequest[]
-  ): AuditSection {
+  private buildMetricsSection(decisions: Decision[], approvals: ApprovalRequest[]): AuditSection {
     const metrics: AuditMetric[] = [];
 
     // Decision metrics
@@ -922,7 +921,10 @@ export class AuditEngine {
       const data = section.content as DecisionAuditContent;
       content += `<table>
         <tr><th>ID</th><th>Action</th><th>State</th><th>Proposed At</th><th>Violations</th></tr>
-        ${data.decisions.slice(0, 20).map((d) => `
+        ${data.decisions
+          .slice(0, 20)
+          .map(
+            (d) => `
           <tr>
             <td>${d.id.substring(0, 12)}...</td>
             <td>${d.actionType}</td>
@@ -930,7 +932,9 @@ export class AuditEngine {
             <td>${d.proposedAt}</td>
             <td>${d.violationCount}</td>
           </tr>
-        `).join('')}
+        `
+          )
+          .join('')}
       </table>`;
     }
 
@@ -940,18 +944,21 @@ export class AuditEngine {
   private exportToSARIF(report: AuditReport): string {
     // SARIF format for static analysis tools
     const sarif = {
-      $schema: 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+      $schema:
+        'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
       version: '2.1.0',
-      runs: [{
-        tool: {
-          driver: {
-            name: 'ContextGraph OS',
-            version: '0.1.0',
-            informationUri: 'https://github.com/contextgraph-os',
+      runs: [
+        {
+          tool: {
+            driver: {
+              name: 'ContextGraph OS',
+              version: '0.1.0',
+              informationUri: 'https://github.com/contextgraph-os',
+            },
           },
+          results: this.buildSARIFResults(report),
         },
-        results: this.buildSARIFResults(report),
-      }],
+      ],
     };
 
     return JSON.stringify(sarif, null, 2);
@@ -966,13 +973,16 @@ export class AuditEngine {
         for (const v of content.violations) {
           results.push({
             ruleId: v.policyId,
-            level: v.severity === 'critical' ? 'error' : v.severity === 'warning' ? 'warning' : 'note',
+            level:
+              v.severity === 'critical' ? 'error' : v.severity === 'warning' ? 'warning' : 'note',
             message: { text: v.message },
-            locations: [{
-              physicalLocation: {
-                artifactLocation: { uri: `decision/${v.decisionId}` },
+            locations: [
+              {
+                physicalLocation: {
+                  artifactLocation: { uri: `decision/${v.decisionId}` },
+                },
               },
-            }],
+            ],
           });
         }
       }

@@ -215,8 +215,10 @@ function parseValue(value: string | undefined): unknown {
   }
 
   // Remove quotes for strings
-  if ((value.startsWith("'") && value.endsWith("'")) ||
-      (value.startsWith('"') && value.endsWith('"'))) {
+  if (
+    (value.startsWith("'") && value.endsWith("'")) ||
+    (value.startsWith('"') && value.endsWith('"'))
+  ) {
     return value.slice(1, -1);
   }
 
@@ -227,9 +229,15 @@ function parseValue(value: string | undefined): unknown {
   }
 
   // Boolean
-  if (value === 'true') {return true;}
-  if (value === 'false') {return false;}
-  if (value === 'null') {return null;}
+  if (value === 'true') {
+    return true;
+  }
+  if (value === 'false') {
+    return false;
+  }
+  if (value === 'null') {
+    return null;
+  }
 
   return value;
 }
@@ -249,10 +257,7 @@ function createJavaScriptEvaluator(): RuleEvaluator {
     };
 
     // Create function from expression
-    const fn = new Function(
-      ...Object.keys(sandbox),
-      `"use strict"; return (${expression});`
-    );
+    const fn = new Function(...Object.keys(sandbox), `"use strict"; return (${expression});`);
 
     const result = fn(...Object.values(sandbox));
     return Boolean(result);
@@ -378,7 +383,7 @@ export class PolicyEvaluator {
       .map((pr) => ({
         policyId: pr.policyId,
         message: pr.verdict.explanation,
-        severity: pr.verdict.enforcement === 'BLOCK' ? 'critical' as const : 'warning' as const,
+        severity: pr.verdict.enforcement === 'BLOCK' ? ('critical' as const) : ('warning' as const),
       }));
 
     const verdictData = {
@@ -411,8 +416,6 @@ export class PolicyEvaluator {
 /**
  * Create a policy evaluator
  */
-export function createPolicyEvaluator(
-  registry?: RuleEvaluatorRegistry
-): PolicyEvaluator {
+export function createPolicyEvaluator(registry?: RuleEvaluatorRegistry): PolicyEvaluator {
   return new PolicyEvaluator(registry);
 }

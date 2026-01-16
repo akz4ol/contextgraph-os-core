@@ -16,13 +16,13 @@ export * from './artifact-api.js';
 export * from './visibility.js';
 
 import type { ContentAddress } from '../core/identity/content-address.js';
-import type { ContextAPI} from './context-api.js';
+import type { ContextAPI } from './context-api.js';
 import { createContextAPI } from './context-api.js';
-import type { DecisionAPI} from './decision-api.js';
+import type { DecisionAPI } from './decision-api.js';
 import { createDecisionAPI } from './decision-api.js';
-import type { ArtifactAPI} from './artifact-api.js';
+import type { ArtifactAPI } from './artifact-api.js';
 import { createArtifactAPI } from './artifact-api.js';
-import type { VisibilityManager} from './visibility.js';
+import type { VisibilityManager } from './visibility.js';
 import { createVisibilityManager } from './visibility.js';
 
 /**
@@ -134,11 +134,9 @@ export const AgentPatterns = {
       const output = await executor(input);
 
       // Register output as artifact
-      sdk.artifact.registerData(
-        output as object,
-        proposal.id as ContentAddress,
-        { description: `Output of ${taskType}` }
-      );
+      sdk.artifact.registerData(output as object, proposal.id as ContentAddress, {
+        description: `Output of ${taskType}`,
+      });
 
       // Mark as executed
       await sdk.decision.execute(proposal.id);
@@ -183,10 +181,7 @@ export const AgentPatterns = {
 
     // Propose the selected option
     const proposal = sdk.decision.propose(
-      sdk.decision.action()
-        .withType(actionType)
-        .withParam('selection', selected)
-        .build(),
+      sdk.decision.action().withType(actionType).withParam('selection', selected).build(),
       [altContext],
       reason
     );

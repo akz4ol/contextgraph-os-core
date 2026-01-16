@@ -153,43 +153,55 @@ export class ConflictResolver {
         const p1 = policiesArray[i];
         const p2 = policiesArray[j];
 
-        if (!p1 || !p2) {continue;}
+        if (!p1 || !p2) {
+          continue;
+        }
 
         // Check if scopes overlap
         const overlappingScope = this.findOverlappingScope(p1, p2);
-        if (!overlappingScope) {continue;}
+        if (!overlappingScope) {
+          continue;
+        }
 
         // Filter by scope if specified
-        if (scope && !this.scopeMatches(overlappingScope, scope)) {continue;}
+        if (scope && !this.scopeMatches(overlappingScope, scope)) {
+          continue;
+        }
 
         // Check for contradiction
         if (this.isContradiction(p1, p2)) {
-          conflicts.push(this.createConflict(
-            ConflictType.CONTRADICTION,
-            [p1, p2],
-            overlappingScope,
-            `Policies "${p1.name}" and "${p2.name}" have contradictory enforcement actions`
-          ));
+          conflicts.push(
+            this.createConflict(
+              ConflictType.CONTRADICTION,
+              [p1, p2],
+              overlappingScope,
+              `Policies "${p1.name}" and "${p2.name}" have contradictory enforcement actions`
+            )
+          );
         }
 
         // Check for overlap with different enforcement
         if (this.isOverlapConflict(p1, p2)) {
-          conflicts.push(this.createConflict(
-            ConflictType.OVERLAP,
-            [p1, p2],
-            overlappingScope,
-            `Policies "${p1.name}" and "${p2.name}" overlap with different enforcement levels`
-          ));
+          conflicts.push(
+            this.createConflict(
+              ConflictType.OVERLAP,
+              [p1, p2],
+              overlappingScope,
+              `Policies "${p1.name}" and "${p2.name}" overlap with different enforcement levels`
+            )
+          );
         }
 
         // Check for ambiguous priority
         if (this.hasAmbiguousPriority(p1, p2)) {
-          conflicts.push(this.createConflict(
-            ConflictType.AMBIGUOUS_PRIORITY,
-            [p1, p2],
-            overlappingScope,
-            `Policies "${p1.name}" and "${p2.name}" have the same priority in overlapping scope`
-          ));
+          conflicts.push(
+            this.createConflict(
+              ConflictType.AMBIGUOUS_PRIORITY,
+              [p1, p2],
+              overlappingScope,
+              `Policies "${p1.name}" and "${p2.name}" have the same priority in overlapping scope`
+            )
+          );
         }
       }
     }
@@ -219,7 +231,9 @@ export class ConflictResolver {
         const p1 = relevantPolicies[i];
         const p2 = relevantPolicies[j];
 
-        if (!p1 || !p2) {continue;}
+        if (!p1 || !p2) {
+          continue;
+        }
 
         if (this.isContradiction(p1, p2)) {
           const conflict = this.createConflict(
@@ -396,14 +410,18 @@ export class ConflictResolver {
   }
 
   private scopeMatches(pattern: string, target: string): boolean {
-    if (pattern === '*') {return true;}
+    if (pattern === '*') {
+      return true;
+    }
 
     const patternParts = pattern.split(':');
     const targetParts = target.split(':');
 
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i] === '*') {
-        if (i === patternParts.length - 1) {return true;}
+        if (i === patternParts.length - 1) {
+          return true;
+        }
         continue;
       }
       if (patternParts[i] !== targetParts[i]) {

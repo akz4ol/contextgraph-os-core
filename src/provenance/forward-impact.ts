@@ -133,9 +133,9 @@ export class ForwardImpactAnalyzer {
     const affectedByType: Record<string, number> = {};
 
     // BFS queue: [nodeId, distance, impactChain, causingEdge]
-    const queue: Array<
-      [ContentAddress, number, ContentAddress[], GraphEdge | undefined]
-    > = [[sourceNodeId, 0, [], undefined]];
+    const queue: Array<[ContentAddress, number, ContentAddress[], GraphEdge | undefined]> = [
+      [sourceNodeId, 0, [], undefined],
+    ];
 
     visited.add(sourceNodeId);
 
@@ -155,8 +155,7 @@ export class ForwardImpactAnalyzer {
       if (opts.asOfTimestamp !== undefined) {
         if (
           node.validity.validFrom > opts.asOfTimestamp ||
-          (node.validity.validUntil !== undefined &&
-            node.validity.validUntil <= opts.asOfTimestamp)
+          (node.validity.validUntil !== undefined && node.validity.validUntil <= opts.asOfTimestamp)
         ) {
           continue;
         }
@@ -236,8 +235,7 @@ export class ForwardImpactAnalyzer {
       directImpacts,
       cascadingImpacts,
       transitiveImpacts,
-      totalAffectedCount:
-        directImpacts.length + cascadingImpacts.length + transitiveImpacts.length,
+      totalAffectedCount: directImpacts.length + cascadingImpacts.length + transitiveImpacts.length,
       affectedByType: affectedByType as Record<NodeTypeValue, number>,
       maxCascadeDepth,
       analyzedAt: new Date().toISOString(),
@@ -298,9 +296,7 @@ export class ForwardImpactAnalyzer {
       }
 
       // Check if cascade crosses policy boundaries
-      const crossesPolicyBoundary = await this.checkPolicyBoundaryCrossing(
-        effectChain
-      );
+      const crossesPolicyBoundary = await this.checkPolicyBoundaryCrossing(effectChain);
 
       cascades.push({
         trigger,
@@ -371,19 +367,13 @@ export class ForwardImpactAnalyzer {
   /**
    * Check if a cascade crosses policy boundaries
    */
-  private async checkPolicyBoundaryCrossing(
-    effectChain: readonly GraphNode[]
-  ): Promise<boolean> {
+  private async checkPolicyBoundaryCrossing(effectChain: readonly GraphNode[]): Promise<boolean> {
     const policySets = new Set<ContentAddress>();
 
     for (const node of effectChain) {
       if (node.type === 'DECISION') {
         // Get governing policies
-        const governedByEdges = await this.graph.getEdgesByType(
-          node.id,
-          'GOVERNED_BY',
-          'outgoing'
-        );
+        const governedByEdges = await this.graph.getEdgesByType(node.id, 'GOVERNED_BY', 'outgoing');
         for (const edge of governedByEdges) {
           policySets.add(edge.targetId);
         }

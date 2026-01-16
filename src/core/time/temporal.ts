@@ -213,6 +213,9 @@ export interface PointInTimeContext {
 /**
  * Create a point-in-time context for querying historical state
  */
-export function asOfTime(timestamp: Timestamp, timeType: TimeTypeValue = 'EVENT'): PointInTimeContext {
+export function asOfTime(
+  timestamp: Timestamp,
+  timeType: TimeTypeValue = 'EVENT'
+): PointInTimeContext {
   return { asOf: timestamp, timeType };
 }

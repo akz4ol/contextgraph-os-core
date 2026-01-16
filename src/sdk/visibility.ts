@@ -147,11 +147,7 @@ export class VisibilityManager {
   /**
    * Filter a context based on actor's visibility
    */
-  filterContext<T>(
-    context: DeclaredContext<T>,
-    actor: Actor,
-    scope: string
-  ): FilteredContext<T> {
+  filterContext<T>(context: DeclaredContext<T>, actor: Actor, scope: string): FilteredContext<T> {
     const visibilityLevel = this.getVisibilityLevel(actor, scope);
 
     switch (visibilityLevel) {
@@ -332,14 +328,18 @@ export class VisibilityManager {
   }
 
   private scopeMatches(pattern: string, target: string): boolean {
-    if (pattern === '*') {return true;}
+    if (pattern === '*') {
+      return true;
+    }
 
     const patternParts = pattern.split(':');
     const targetParts = target.split(':');
 
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i] === '*') {
-        if (i === patternParts.length - 1) {return true;}
+        if (i === patternParts.length - 1) {
+          return true;
+        }
         continue;
       }
       if (patternParts[i] !== targetParts[i]) {
@@ -385,7 +385,8 @@ export class VisibilityManager {
 
     // Check if actor has elevated access
     const authorityLevel = this.getAuthorityFromActor(actor, scope);
-    if (authorityLevel >= 4) { // APPROVE level or higher
+    if (authorityLevel >= 4) {
+      // APPROVE level or higher
       return data;
     }
 

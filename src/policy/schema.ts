@@ -211,9 +211,10 @@ export interface PolicyEvaluationInput {
 /**
  * Validate a policy definition
  */
-export function validatePolicyDefinition(
-  policy: Partial<PolicyDefinition>
-): { valid: boolean; errors: readonly string[] } {
+export function validatePolicyDefinition(policy: Partial<PolicyDefinition>): {
+  valid: boolean;
+  errors: readonly string[];
+} {
   const errors: string[] = [];
 
   if (!policy.name || policy.name.trim().length === 0) {
@@ -371,9 +372,8 @@ export class PolicyBuilder {
   }
 
   rule(format: RuleFormatValue, expression: string, explanation?: string): this {
-    this.policy.rule = explanation !== undefined
-      ? { format, expression, explanation }
-      : { format, expression };
+    this.policy.rule =
+      explanation !== undefined ? { format, expression, explanation } : { format, expression };
     return this;
   }
 

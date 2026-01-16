@@ -239,9 +239,8 @@ export class ReplayEngine {
     };
 
     const changesApplied = this.getChangesApplied(request);
-    const result: ReplayResult = changesApplied.length > 0
-      ? { ...baseResult, changesApplied }
-      : baseResult;
+    const result: ReplayResult =
+      changesApplied.length > 0 ? { ...baseResult, changesApplied } : baseResult;
 
     return result;
   }
@@ -266,10 +265,7 @@ export class ReplayEngine {
   /**
    * What-if analysis: what would happen if we changed something?
    */
-  whatIf(
-    decisionId: ContentAddress,
-    changes: readonly WhatIfChange[]
-  ): ReplayResult {
+  whatIf(decisionId: ContentAddress, changes: readonly WhatIfChange[]): ReplayResult {
     return this.replay({
       originalDecisionId: decisionId,
       mode: ReplayMode.WHAT_IF,
@@ -366,10 +362,7 @@ export class ReplayEngine {
     };
   }
 
-  private compareOutcomes(
-    original: DecisionVerdict,
-    replayed: DecisionVerdict
-  ): ReplayComparison {
+  private compareOutcomes(original: DecisionVerdict, replayed: DecisionVerdict): ReplayComparison {
     const outcomeChanged = original.result !== replayed.result;
 
     // Build violation diff

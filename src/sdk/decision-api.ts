@@ -206,9 +206,8 @@ export class DecisionAPI {
       feedback: [] as PolicyFeedback[],
     };
 
-    const proposal: Proposal = rationale !== undefined
-      ? { ...baseProposal, rationale }
-      : baseProposal;
+    const proposal: Proposal =
+      rationale !== undefined ? { ...baseProposal, rationale } : baseProposal;
 
     this.proposals.set(id, proposal);
     return proposal;
@@ -223,9 +222,7 @@ export class DecisionAPI {
     contexts: readonly DeclaredContext[],
     rationale?: string
   ): Proposal {
-    const action = this.action()
-      .withType(actionType)
-      .build();
+    const action = this.action().withType(actionType).build();
 
     // Add params
     const actionWithParams: DecisionAction = {

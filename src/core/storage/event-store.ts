@@ -221,10 +221,7 @@ export class InMemoryEventStore implements EventStore {
     const subscriber: {
       callback: (event: StoredEvent) => void | Promise<void>;
       types?: readonly EventTypeValue[];
-    } =
-      options?.types !== undefined
-        ? { callback, types: options.types }
-        : { callback };
+    } = options?.types !== undefined ? { callback, types: options.types } : { callback };
     this.subscribers.push(subscriber);
 
     // Return unsubscribe function

@@ -178,9 +178,10 @@ export class ApprovalQueue {
       context: input.context,
     };
 
-    const request: ApprovalRequest = input.triggeringPolicyId !== undefined
-      ? { ...baseRequest, triggeringPolicyId: input.triggeringPolicyId }
-      : baseRequest;
+    const request: ApprovalRequest =
+      input.triggeringPolicyId !== undefined
+        ? { ...baseRequest, triggeringPolicyId: input.triggeringPolicyId }
+        : baseRequest;
 
     this.requests.set(id, request);
     this.byDecision.set(input.decisionId, id);
@@ -336,7 +337,8 @@ export class ApprovalQueue {
 
     for (const [id, request] of this.requests) {
       if (
-        (request.status === ApprovalStatus.PENDING || request.status === ApprovalStatus.IN_REVIEW) &&
+        (request.status === ApprovalStatus.PENDING ||
+          request.status === ApprovalStatus.IN_REVIEW) &&
         request.expiresAt < now
       ) {
         const outcome: ApprovalOutcome = {

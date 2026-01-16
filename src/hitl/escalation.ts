@@ -14,7 +14,12 @@ import type { Timestamp } from '../core/time/temporal.js';
 import type { Decision } from '../decision/lifecycle.js';
 import type { DecisionVerdict } from '../policy/evaluator.js';
 import type { AuthorityLevelValue } from '../actor/authority.js';
-import type { ApprovalRequest, ApprovalContext, ApprovalPriorityValue , ApprovalQueue} from './approval.js';
+import type {
+  ApprovalRequest,
+  ApprovalContext,
+  ApprovalPriorityValue,
+  ApprovalQueue,
+} from './approval.js';
 import { ApprovalPriority, createApprovalQueue } from './approval.js';
 import { computeContentAddress } from '../core/identity/content-address.js';
 
@@ -330,9 +335,8 @@ export class EscalationManager {
       approvalRequestId: approvalRequest.id,
     };
 
-    const record: EscalationRecord = matchingRule !== undefined
-      ? { ...baseRecord, ruleId: matchingRule.id }
-      : baseRecord;
+    const record: EscalationRecord =
+      matchingRule !== undefined ? { ...baseRecord, ruleId: matchingRule.id } : baseRecord;
 
     this.records.set(recordId, record);
     this.byDecision.set(input.decision.id, recordId);
@@ -452,10 +456,14 @@ export class EscalationManager {
 
     for (const approval of timedOutApprovals) {
       const recordId = this.byDecision.get(approval.decisionId);
-      if (!recordId) {continue;}
+      if (!recordId) {
+        continue;
+      }
 
       const record = this.records.get(recordId);
-      if (!record) {continue;}
+      if (!record) {
+        continue;
+      }
 
       const timestamp = new Date().toISOString();
 
@@ -547,7 +555,9 @@ export class EscalationManager {
 
       case 'amount_threshold': {
         const amount = decision.action.parameters['amount'] as number | undefined;
-        if (amount === undefined) {return true;}
+        if (amount === undefined) {
+          return true;
+        }
         const threshold = Number(condition.value);
         return condition.operator === 'greater_than' ? amount > threshold : amount < threshold;
       }
@@ -565,14 +575,18 @@ export class EscalationManager {
    * Check if scope pattern matches target
    */
   private scopeMatches(pattern: string, target: string): boolean {
-    if (pattern === '*') {return true;}
+    if (pattern === '*') {
+      return true;
+    }
 
     const patternParts = pattern.split(':');
     const targetParts = target.split(':');
 
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i] === '*') {
-        if (i === patternParts.length - 1) {return true;}
+        if (i === patternParts.length - 1) {
+          return true;
+        }
         continue;
       }
       if (patternParts[i] !== targetParts[i]) {
