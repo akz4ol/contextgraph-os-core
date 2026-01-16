@@ -1,0 +1,47 @@
+# ContextGraph OS Code Owners
+# These owners will be requested for review when changes are made to the paths below.
+
+# Default owners for everything in the repo
+* @akz4ol
+
+# Core modules - require maintainer review
+/src/core/ @akz4ol
+/src/graph/ @akz4ol
+
+# Policy engine - critical for governance
+/src/policy/ @akz4ol
+
+# Decision protocol - critical for accountability
+/src/decision/ @akz4ol
+
+# Actor & authority model - critical for security
+/src/actor/ @akz4ol
+
+# Safety and failure handling
+/src/safety/ @akz4ol
+
+# SDK - public API surface
+/src/sdk/ @akz4ol
+
+# Query and audit - compliance critical
+/src/query/ @akz4ol
+
+# Human-in-the-loop controls
+/src/hitl/ @akz4ol
+
+# Provenance engine
+/src/provenance/ @akz4ol
+
+# CLI tools
+/cli/ @akz4ol
+
+# Configuration files
+/.github/ @akz4ol
+/package.json @akz4ol
+/tsconfig.json @akz4ol
+
+# Documentation
+/docs/ @akz4ol
+/README.md @akz4ol
+/CONTRIBUTING.md @akz4ol
+/SECURITY.md @akz4ol

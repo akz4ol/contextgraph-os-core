@@ -1,0 +1,97 @@
+version: 2
+
+registries:
+  npm-registry:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    replaces-base: true
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 10
+    registries:
+      - npm-registry
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps(dev)"
+      include: scope
+    labels:
+      - dependencies
+      - automated
+    groups:
+      production-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+          - "typescript"
+          - "eslint*"
+          - "prettier"
+          - "jest*"
+          - "@jest/*"
+        update-types:
+          - minor
+          - patch
+      typescript-types:
+        applies-to: version-updates
+        patterns:
+          - "@types/*"
+          - "typescript"
+        update-types:
+          - minor
+          - patch
+      linting:
+        applies-to: version-updates
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "prettier"
+          - "@typescript-eslint/*"
+        update-types:
+          - minor
+          - patch
+      testing:
+        applies-to: version-updates
+        patterns:
+          - "jest*"
+          - "@jest/*"
+          - "@types/jest"
+          - "ts-jest"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+      include: scope
+    labels:
+      - dependencies
+      - ci
+      - automated
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

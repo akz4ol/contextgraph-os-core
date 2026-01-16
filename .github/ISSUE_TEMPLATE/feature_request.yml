@@ -1,0 +1,93 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please fill out the form below to help us understand your request.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which area of ContextGraph OS does this relate to?
+      options:
+        - Core Graph Engine
+        - Provenance & Lineage
+        - Policy Engine
+        - Decision Protocol
+        - Actor & Authority Model
+        - Human-in-the-Loop
+        - Query & Audit
+        - Agent SDK
+        - Safety & Failure Handling
+        - CLI Tools
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Describe the problem this feature would solve. What pain point are you experiencing?
+      placeholder: I'm frustrated when trying to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed solution or feature.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered.
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Provide a concrete example of how this feature would be used.
+      placeholder: |
+        ```typescript
+        // Example usage
+        const graph = new ContextGraph();
+        graph.newFeature();
+        ```
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Nice to have
+        - Important
+        - Critical for my use case
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to contribute a PR for this feature
+        - label: I am willing to help test this feature
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues/discussions to ensure this hasn't been requested before
+          required: true

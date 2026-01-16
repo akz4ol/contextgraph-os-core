@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+.tsbuildinfo
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Test artifacts
+junit.xml
+test-results/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# Package manager locks (keep package-lock.json, ignore others)
+yarn.lock
+pnpm-lock.yaml
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Prettier cache
+.prettiercache
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Local development
+.local/
+data/
+*.db
+*.sqlite
+
+# Secrets (never commit)
+*.pem
+*.key
+secrets/
+credentials/
