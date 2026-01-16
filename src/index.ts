@@ -18,5 +18,11 @@ export * from './provenance/index.js';
 // Policy Engine exports
 export * from './policy/index.js';
 
+// Decision Protocol exports
+export * from './decision/index.js';
+
+// Actor & Authority exports
+export * from './actor/index.js';
+
 // Version
 export const VERSION = '0.1.0';
