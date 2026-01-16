@@ -227,9 +227,9 @@ function parseValue(value: string | undefined): unknown {
   }
 
   // Boolean
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  if (value === 'null') return null;
+  if (value === 'true') {return true;}
+  if (value === 'false') {return false;}
+  if (value === 'null') {return null;}
 
   return value;
 }

@@ -16,10 +16,14 @@ export * from './artifact-api.js';
 export * from './visibility.js';
 
 import type { ContentAddress } from '../core/identity/content-address.js';
-import { ContextAPI, createContextAPI } from './context-api.js';
-import { DecisionAPI, createDecisionAPI } from './decision-api.js';
-import { ArtifactAPI, createArtifactAPI } from './artifact-api.js';
-import { VisibilityManager, createVisibilityManager } from './visibility.js';
+import type { ContextAPI} from './context-api.js';
+import { createContextAPI } from './context-api.js';
+import type { DecisionAPI} from './decision-api.js';
+import { createDecisionAPI } from './decision-api.js';
+import type { ArtifactAPI} from './artifact-api.js';
+import { createArtifactAPI } from './artifact-api.js';
+import type { VisibilityManager} from './visibility.js';
+import { createVisibilityManager } from './visibility.js';
 
 /**
  * Agent SDK - unified interface for building accountable agents

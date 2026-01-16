@@ -505,7 +505,7 @@ export class AuditEngine {
 
     for (const decision of decisions) {
       const verdict = this.verdicts.get(decision.id);
-      if (!verdict) continue;
+      if (!verdict) {continue;}
 
       for (const v of verdict.violations) {
         byPolicy[v.policyId] = (byPolicy[v.policyId] ?? 0) + 1;

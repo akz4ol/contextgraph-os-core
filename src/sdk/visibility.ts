@@ -332,14 +332,14 @@ export class VisibilityManager {
   }
 
   private scopeMatches(pattern: string, target: string): boolean {
-    if (pattern === '*') return true;
+    if (pattern === '*') {return true;}
 
     const patternParts = pattern.split(':');
     const targetParts = target.split(':');
 
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i] === '*') {
-        if (i === patternParts.length - 1) return true;
+        if (i === patternParts.length - 1) {return true;}
         continue;
       }
       if (patternParts[i] !== targetParts[i]) {

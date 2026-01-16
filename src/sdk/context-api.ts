@@ -250,7 +250,7 @@ export class ContextAPI {
    */
   get<T = unknown>(id: ContentAddress): DeclaredContext<T> | undefined {
     const context = this.contexts.get(id);
-    if (!context) return undefined;
+    if (!context) {return undefined;}
 
     // Check expiry
     if (context.expiresAt && context.expiresAt < new Date().toISOString()) {

@@ -495,7 +495,7 @@ export class WhyQueryEngine {
     const seenPolicies = new Set<ContentAddress>();
 
     for (const violation of verdict.violations) {
-      if (seenPolicies.has(violation.policyId)) continue;
+      if (seenPolicies.has(violation.policyId)) {continue;}
       seenPolicies.add(violation.policyId);
 
       const policy = this.policies.get(violation.policyId);
