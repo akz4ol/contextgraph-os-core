@@ -21,6 +21,23 @@ import type {
 import { isPolicyActive } from './schema.js';
 
 /**
+ * Verdict result type
+ */
+export type VerdictResult = 'ALLOW' | 'DENY' | 'ESCALATE' | 'ANNOTATE';
+
+/**
+ * Policy violation record
+ */
+export interface PolicyViolation {
+  /** Policy that was violated */
+  readonly policyId: ContentAddress;
+  /** Violation message */
+  readonly message: string;
+  /** Severity level */
+  readonly severity: 'info' | 'warning' | 'error' | 'critical';
+}
+
+/**
  * Result of evaluating a single policy
  */
 export interface PolicyVerdictResult {
@@ -45,7 +62,9 @@ export interface DecisionVerdict {
   /** The decision being evaluated */
   readonly decisionId: ContentAddress;
   /** Overall result */
-  readonly result: 'ALLOW' | 'DENY' | 'ESCALATE' | 'ANNOTATE';
+  readonly result: VerdictResult;
+  /** Scope that was evaluated */
+  readonly scope: string;
   /** Individual policy results */
   readonly policyResults: readonly PolicyVerdictEntry[];
   /** Policies that blocked the decision */
@@ -54,6 +73,8 @@ export interface DecisionVerdict {
   readonly escalatingPolicies: readonly ContentAddress[];
   /** All annotations from policies */
   readonly annotations: readonly string[];
+  /** Policy violations found */
+  readonly violations: readonly PolicyViolation[];
   /** Timestamp of evaluation */
   readonly evaluatedAt: Timestamp;
   /** Time taken to evaluate (ms) */
@@ -194,8 +215,10 @@ function parseValue(value: string | undefined): unknown {
   }
 
   // Remove quotes for strings
-  if ((value.startsWith("'") && value.endsWith("'")) ||
-      (value.startsWith('"') && value.endsWith('"'))) {
+  if (
+    (value.startsWith("'") && value.endsWith("'")) ||
+    (value.startsWith('"') && value.endsWith('"'))
+  ) {
     return value.slice(1, -1);
   }
 
@@ -206,9 +229,15 @@ function parseValue(value: string | undefined): unknown {
   }
 
   // Boolean
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  if (value === 'null') return null;
+  if (value === 'true') {
+    return true;
+  }
+  if (value === 'false') {
+    return false;
+  }
+  if (value === 'null') {
+    return null;
+  }
 
   return value;
 }
@@ -228,10 +257,7 @@ function createJavaScriptEvaluator(): RuleEvaluator {
     };
 
     // Create function from expression
-    const fn = new Function(
-      ...Object.keys(sandbox),
-      `"use strict"; return (${expression});`
-    );
+    const fn = new Function(...Object.keys(sandbox), `"use strict"; return (${expression});`);
 
     const result = fn(...Object.values(sandbox));
     return Boolean(result);
@@ -352,13 +378,23 @@ export class PolicyEvaluator {
     }
 
     const evaluatedAt = new Date().toISOString();
+    const violations: PolicyViolation[] = policyResults
+      .filter((pr) => !pr.verdict.passed)
+      .map((pr) => ({
+        policyId: pr.policyId,
+        message: pr.verdict.explanation,
+        severity: pr.verdict.enforcement === 'BLOCK' ? ('critical' as const) : ('warning' as const),
+      }));
+
     const verdictData = {
       decisionId: context.decision.id,
       result,
+      scope: context.decision.type,
       policyResults,
       blockingPolicies,
       escalatingPolicies,
       annotations: allAnnotations,
+      violations,
       evaluatedAt,
       evaluationTimeMs: Date.now() - startTime,
     };
@@ -380,8 +416,6 @@ export class PolicyEvaluator {
 /**
  * Create a policy evaluator
  */
-export function createPolicyEvaluator(
-  registry?: RuleEvaluatorRegistry
-): PolicyEvaluator {
+export function createPolicyEvaluator(registry?: RuleEvaluatorRegistry): PolicyEvaluator {
   return new PolicyEvaluator(registry);
 }

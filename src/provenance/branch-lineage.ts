@@ -128,22 +128,14 @@ export class BranchLineageTracker {
     );
 
     // The original decision is the "committed" branch
-    const committedBranch = await this.buildBranch(
-      decisionPointId,
-      decisionPointId,
-      'committed'
-    );
+    const committedBranch = await this.buildBranch(decisionPointId, decisionPointId, 'committed');
     branches.push(committedBranch);
 
     // Each alternative represents a rejected branch
     for (const edge of alternativeEdges) {
       const alternativeNode = await this.graph.getNode(edge.targetId);
       if (alternativeNode) {
-        const branch = await this.buildBranch(
-          edge.targetId,
-          decisionPointId,
-          'rejected'
-        );
+        const branch = await this.buildBranch(edge.targetId, decisionPointId, 'rejected');
         if (options.includeAbandoned || branch.status !== 'abandoned') {
           branches.push(branch);
         }
@@ -156,9 +148,7 @@ export class BranchLineageTracker {
   /**
    * Compare a committed branch with its alternatives
    */
-  async compareBranches(
-    committedDecisionId: ContentAddress
-  ): Promise<BranchComparison> {
+  async compareBranches(committedDecisionId: ContentAddress): Promise<BranchComparison> {
     const branches = await this.getBranchesFromPoint(committedDecisionId);
     const committedBranch = branches.find((b) => b.status === 'committed');
 
@@ -280,11 +270,7 @@ export class BranchLineageTracker {
     }
 
     // Check for ALTERNATIVE_TO edges
-    const altEdges = await this.graph.getEdgesByType(
-      decisionId,
-      'ALTERNATIVE_TO',
-      'outgoing'
-    );
+    const altEdges = await this.graph.getEdgesByType(decisionId, 'ALTERNATIVE_TO', 'outgoing');
 
     if (altEdges.length !== declaredAlternatives.length) {
       warnings.push(
@@ -319,11 +305,7 @@ export class BranchLineageTracker {
       const visited = new Set<ContentAddress>([currentId]);
 
       while (true) {
-        const outgoingEdges = await this.graph.getEdgesByType(
-          currentId,
-          'CAUSES',
-          'outgoing'
-        );
+        const outgoingEdges = await this.graph.getEdgesByType(currentId, 'CAUSES', 'outgoing');
 
         const nextDecisionEdge = outgoingEdges.find(async (e) => {
           const node = await this.graph.getNode(e.targetId);
@@ -376,11 +358,7 @@ export class BranchLineageTracker {
    * Check if a decision has sub-branches
    */
   private async hasSubBranches(decisionId: ContentAddress): Promise<boolean> {
-    const altEdges = await this.graph.getEdgesByType(
-      decisionId,
-      'ALTERNATIVE_TO',
-      'outgoing'
-    );
+    const altEdges = await this.graph.getEdgesByType(decisionId, 'ALTERNATIVE_TO', 'outgoing');
     return altEdges.length > 0;
   }
 
@@ -404,11 +382,7 @@ export class BranchLineageTracker {
 
     for (const branch of alternatives) {
       for (const decision of branch.decisions) {
-        const refs = await this.graph.getEdgesByType(
-          decision.id,
-          'REFERENCES',
-          'outgoing'
-        );
+        const refs = await this.graph.getEdgesByType(decision.id, 'REFERENCES', 'outgoing');
         refs.forEach((e) => alternativeContexts.add(e.targetId));
       }
     }
@@ -436,28 +410,18 @@ export class BranchLineageTracker {
     const alternativePolicies = new Set<ContentAddress>();
 
     for (const decision of committed.decisions) {
-      const governed = await this.graph.getEdgesByType(
-        decision.id,
-        'GOVERNED_BY',
-        'outgoing'
-      );
+      const governed = await this.graph.getEdgesByType(decision.id, 'GOVERNED_BY', 'outgoing');
       governed.forEach((e) => committedPolicies.add(e.targetId));
     }
 
     for (const branch of alternatives) {
       for (const decision of branch.decisions) {
-        const governed = await this.graph.getEdgesByType(
-          decision.id,
-          'GOVERNED_BY',
-          'outgoing'
-        );
+        const governed = await this.graph.getEdgesByType(decision.id, 'GOVERNED_BY', 'outgoing');
         governed.forEach((e) => alternativePolicies.add(e.targetId));
       }
     }
 
-    const policyDiffs = [...committedPolicies].filter(
-      (p) => !alternativePolicies.has(p)
-    );
+    const policyDiffs = [...committedPolicies].filter((p) => !alternativePolicies.has(p));
 
     if (policyDiffs.length > 0) {
       factors.push({

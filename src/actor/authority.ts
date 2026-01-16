@@ -293,19 +293,14 @@ export class AuthorityChecker {
   /**
    * Check authority for a policy scope
    */
-  async checkForPolicy(
-    actor: Actor,
-    policy: PolicyDefinition
-  ): Promise<AuthorityCheckResult> {
+  async checkForPolicy(actor: Actor, policy: PolicyDefinition): Promise<AuthorityCheckResult> {
     // Policies with ESCALATE enforcement require APPROVE level
     // Policies with BLOCK enforcement require EXECUTE level
     const minLevel =
-      policy.enforcement === 'ESCALATE'
-        ? AuthorityLevel.APPROVE
-        : AuthorityLevel.EXECUTE;
+      policy.enforcement === 'ESCALATE' ? AuthorityLevel.APPROVE : AuthorityLevel.EXECUTE;
 
     return this.check(actor, {
-      scope: policy.scope.type === 'GLOBAL' ? '*' : policy.scope.pattern ?? '*',
+      scope: policy.scope.type === 'GLOBAL' ? '*' : (policy.scope.pattern ?? '*'),
       minLevel,
     });
   }

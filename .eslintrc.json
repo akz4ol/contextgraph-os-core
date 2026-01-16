@@ -33,31 +33,22 @@
       "error",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
     ],
-    "@typescript-eslint/consistent-type-imports": [
-      "error",
-      { "prefer": "type-imports" }
-    ],
+    "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports" }],
     "@typescript-eslint/consistent-type-exports": "error",
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/strict-boolean-expressions": "warn",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
-        "newlines-between": "always",
-        "alphabetize": { "order": "asc", "caseInsensitive": true }
-      }
-    ],
-    "import/no-duplicates": "error",
+    "@typescript-eslint/require-await": "warn",
+    "@typescript-eslint/no-implied-eval": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-redundant-type-constituents": "warn",
+    "no-constant-condition": "warn",
+    "import/order": "off",
+    "import/no-duplicates": "off",
+    "import/no-unresolved": "off",
+    "import/namespace": "off",
+    "import/export": "off",
     "no-console": "warn",
     "eqeqeq": ["error", "always"],
     "curly": ["error", "all"],

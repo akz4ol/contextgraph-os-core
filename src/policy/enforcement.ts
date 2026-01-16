@@ -193,20 +193,21 @@ export class PolicyEnforcer {
       type: 'ESCALATE',
       canProceed: false,
       reason: `Requires approval due to: ${escalatingPolicyNames.join(', ')}`,
-      requiredSteps: escalationRequest.deadline !== undefined
-        ? [
-            {
-              type: 'approval',
-              description: `Approval required for decision ${verdict.decisionId}`,
-              deadline: escalationRequest.deadline,
-            },
-          ]
-        : [
-            {
-              type: 'approval',
-              description: `Approval required for decision ${verdict.decisionId}`,
-            },
-          ],
+      requiredSteps:
+        escalationRequest.deadline !== undefined
+          ? [
+              {
+                type: 'approval',
+                description: `Approval required for decision ${verdict.decisionId}`,
+                deadline: escalationRequest.deadline,
+              },
+            ]
+          : [
+              {
+                type: 'approval',
+                description: `Approval required for decision ${verdict.decisionId}`,
+              },
+            ],
       annotations: [...verdict.annotations, `ESCALATION:${escalationRequest.id}`],
       timestamp,
     };
@@ -235,22 +236,23 @@ export class PolicyEnforcer {
     verdict: DecisionVerdict,
     notes?: string
   ): Promise<ShadowObservation> {
-    const observation: ShadowObservation = notes !== undefined
-      ? {
-          decisionId,
-          policyId,
-          wouldHaveEnforced,
-          verdict,
-          observedAt: new Date().toISOString(),
-          notes,
-        }
-      : {
-          decisionId,
-          policyId,
-          wouldHaveEnforced,
-          verdict,
-          observedAt: new Date().toISOString(),
-        };
+    const observation: ShadowObservation =
+      notes !== undefined
+        ? {
+            decisionId,
+            policyId,
+            wouldHaveEnforced,
+            verdict,
+            observedAt: new Date().toISOString(),
+            notes,
+          }
+        : {
+            decisionId,
+            policyId,
+            wouldHaveEnforced,
+            verdict,
+            observedAt: new Date().toISOString(),
+          };
 
     if (this.config.logShadowObservations) {
       this.shadowObservations.push(observation);
@@ -285,9 +287,7 @@ export class PolicyEnforcer {
     timestamp: Timestamp
   ): EscalationRequest {
     const deadline = this.config.escalationTimeoutHours
-      ? new Date(
-          Date.now() + this.config.escalationTimeoutHours * 60 * 60 * 1000
-        ).toISOString()
+      ? new Date(Date.now() + this.config.escalationTimeoutHours * 60 * 60 * 1000).toISOString()
       : undefined;
 
     // Determine priority based on policies
@@ -313,9 +313,7 @@ export class PolicyEnforcer {
   /**
    * Determine escalation priority based on verdict
    */
-  private determinePriority(
-    verdict: DecisionVerdict
-  ): EscalationRequest['priority'] {
+  private determinePriority(verdict: DecisionVerdict): EscalationRequest['priority'] {
     // If any blocking policies also exist, it's critical
     if (verdict.blockingPolicies.length > 0) {
       return 'critical';

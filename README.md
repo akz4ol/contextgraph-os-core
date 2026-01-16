@@ -20,25 +20,32 @@ ContextGraph OS is an infrastructure layer for AI agent systems that provides:
 ## Key Concepts
 
 ### Context Graph Engine
+
 The heart of the system - a typed, temporal graph where:
+
 - **Nodes** represent Context, Decisions, Policies, Actors, and Artifacts
 - **Edges** encode semantic relationships (CAUSES, DERIVED_FROM, GOVERNED_BY, APPROVED_BY)
 - All state changes are immutable, append-only events
 
 ### Provenance & Lineage
+
 - **Backward Provenance**: "Why was this decision made?" - trace to originating context
 - **Forward Impact**: "What did this affect?" - blast-radius analysis
 - **Branch-Aware**: Exploration doesn't destroy accountability
 
 ### Policy Evaluation
+
 Pre-execution governance with enforcement modes:
+
 - **BLOCK**: Prevent execution
 - **ANNOTATE**: Allow with warnings
 - **ESCALATE**: Require human approval
 - **SHADOW**: Observe-only (for policy development)
 
 ### Decision Protocol
+
 Atomic, accountable decision lifecycle:
+
 1. **Proposed**: Decision candidate created
 2. **Evaluated**: Policies applied, verdict attached
 3. **Committed**: Irreversibly recorded with full context
@@ -61,14 +68,14 @@ const graph = new ContextGraph();
 const actor = await graph.registerActor({
   type: 'agent',
   id: 'research-agent-001',
-  authority: ['read:documents', 'propose:decisions']
+  authority: ['read:documents', 'propose:decisions'],
 });
 
 // Define a policy
 const policy = await graph.createPolicy({
   scope: 'financial-decisions',
   rule: 'amount > 10000 requires human approval',
-  enforcement: 'ESCALATE'
+  enforcement: 'ESCALATE',
 });
 
 // Agent proposes a decision with context
@@ -78,8 +85,8 @@ const decision = await graph.proposeDecision({
   action: { type: 'approve-expense', amount: 15000 },
   alternatives: [
     { action: 'reject', rationale: 'Over budget' },
-    { action: 'defer', rationale: 'Await Q2 budget' }
-  ]
+    { action: 'defer', rationale: 'Await Q2 budget' },
+  ],
 });
 
 // Decision is automatically evaluated against policies

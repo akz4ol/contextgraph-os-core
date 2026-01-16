@@ -28,7 +28,7 @@ If you discover a security vulnerability within ContextGraph OS, please report i
 - **Fix Timeline**: Depends on severity
 
 | Severity | Target Fix Time |
-|----------|-----------------|
+| -------- | --------------- |
 | Critical | 24-48 hours     |
 | High     | 7 days          |
 | Medium   | 30 days         |

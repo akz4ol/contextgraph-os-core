@@ -173,9 +173,6 @@ export function generateRandomAddress(
 /**
  * Create a content address from a pre-computed hash
  */
-export function createContentAddress(
-  algorithm: HashAlgorithmValue,
-  hash: string
-): ContentAddress {
+export function createContentAddress(algorithm: HashAlgorithmValue, hash: string): ContentAddress {
   return `${algorithm}:${hash}`;
 }

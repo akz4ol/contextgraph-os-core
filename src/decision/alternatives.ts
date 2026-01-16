@@ -203,20 +203,21 @@ export class AlternativeTracker {
       throw new Error(`Alternative not found: ${alternativeId}`);
     }
 
-    const rejection: AlternativeRejection = evidence !== undefined
-      ? {
-          reason,
-          explanation,
-          rejectedBy,
-          rejectedAt: new Date().toISOString(),
-          evidence,
-        }
-      : {
-          reason,
-          explanation,
-          rejectedBy,
-          rejectedAt: new Date().toISOString(),
-        };
+    const rejection: AlternativeRejection =
+      evidence !== undefined
+        ? {
+            reason,
+            explanation,
+            rejectedBy,
+            rejectedAt: new Date().toISOString(),
+            evidence,
+          }
+        : {
+            reason,
+            explanation,
+            rejectedBy,
+            rejectedAt: new Date().toISOString(),
+          };
 
     const rejectedAlternative: Alternative = {
       ...alternative,

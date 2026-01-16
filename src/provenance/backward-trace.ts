@@ -166,8 +166,7 @@ export class BackwardProvenanceTracer {
       if (opts.asOfTimestamp !== undefined) {
         if (
           node.validity.validFrom > opts.asOfTimestamp ||
-          (node.validity.validUntil !== undefined &&
-            node.validity.validUntil <= opts.asOfTimestamp)
+          (node.validity.validUntil !== undefined && node.validity.validUntil <= opts.asOfTimestamp)
         ) {
           continue;
         }
@@ -263,9 +262,7 @@ export class BackwardProvenanceTracer {
       'POLICY',
     ];
 
-    const minimalNodes = fullTrace.nodes.filter((pn) =>
-      minimalNodeTypes.includes(pn.node.type)
-    );
+    const minimalNodes = fullTrace.nodes.filter((pn) => minimalNodeTypes.includes(pn.node.type));
 
     const minimalNodeIds = new Set(minimalNodes.map((pn) => pn.node.id));
 

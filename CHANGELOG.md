@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project structure with TypeScript configuration
 - GitHub Actions CI/CD pipelines (CI, Release, CodeQL, Dependabot auto-merge)
 - Issue and PR templates
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic project documentation
 
 ### Security
+
 - CodeQL security analysis enabled
 - Dependency vulnerability scanning
 - Secret scanning enabled
