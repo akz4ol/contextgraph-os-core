@@ -2,5 +2,6 @@ node_modules
 dist
 coverage
 cli
-jest.config.ts
+jest.config.cjs
 tests
+examples
