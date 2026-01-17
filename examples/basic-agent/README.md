@@ -25,34 +25,28 @@ npx tsx examples/basic-agent/index.ts
 ## Key Concepts Demonstrated
 
 ### Context API
+
 ```typescript
 // Declare user input
-const userInput = sdk.context.declareUserInput(
-  { request: 'Create a document' },
-  'cli'
-);
+const userInput = sdk.context.declareUserInput({ request: 'Create a document' }, 'cli');
 
 // Declare system state
-const systemState = sdk.context.declareSystemState(
-  { diskSpace: '500GB' },
-  'system-monitor'
-);
+const systemState = sdk.context.declareSystemState({ diskSpace: '500GB' }, 'system-monitor');
 ```
 
 ### Decision API
+
 ```typescript
 // Build and propose an action
 const proposal = sdk.decision.propose(
-  sdk.decision.action()
-    .withType('CREATE_DOCUMENT')
-    .withParam('name', 'report.md')
-    .build(),
+  sdk.decision.action().withType('CREATE_DOCUMENT').withParam('name', 'report.md').build(),
   [userInput, systemState],
   'User requested document creation'
 );
 ```
 
 ### Policy Evaluation
+
 ```typescript
 // Define policies as data
 const policy: PolicyDefinition = {
@@ -71,6 +65,7 @@ const verdict = await policyEvaluator.evaluateAll(policies, context);
 ```
 
 ### Decision Lifecycle
+
 ```typescript
 // Propose → Evaluate → Commit
 const decision = await stateMachine.propose({ action, proposedBy, contextRefs });
@@ -79,13 +74,12 @@ const committed = await stateMachine.commit(decision.id);
 ```
 
 ### Artifact Registration
+
 ```typescript
 // Track outputs
-const artifact = sdk.artifact.registerData(
-  { content: 'Document content' },
-  decision.id,
-  { description: 'Created document' }
-);
+const artifact = sdk.artifact.registerData({ content: 'Document content' }, decision.id, {
+  description: 'Created document',
+});
 ```
 
 ## Expected Output

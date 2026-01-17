@@ -116,11 +116,10 @@ describe('Agent SDK', () => {
       });
 
       it('should declare external data', () => {
-        const context = contextAPI.declareExternalData(
-          { weather: 'sunny' },
-          'weather-api',
-          { confidence: 0.9, ttlMs: 300000 }
-        );
+        const context = contextAPI.declareExternalData({ weather: 'sunny' }, 'weather-api', {
+          confidence: 0.9,
+          ttlMs: 300000,
+        });
 
         expect(context.type).toBe(SDKContextType.EXTERNAL_DATA);
         expect(context.source).toBe('weather-api');
@@ -304,7 +303,9 @@ describe('Agent SDK', () => {
         });
 
         expect(result.valid).toBe(true);
-        expect(result.warnings).toContain('Low confidence context may lead to unreliable decisions');
+        expect(result.warnings).toContain(
+          'Low confidence context may lead to unreliable decisions'
+        );
       });
     });
 
@@ -397,10 +398,11 @@ describe('Agent SDK', () => {
         const ctx2 = contextAPI.declareUserInput({ second: true });
         const ctx3 = contextAPI.declareUserInput({ third: true });
 
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [ctx1, ctx2, ctx3]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          ctx1,
+          ctx2,
+          ctx3,
+        ]);
 
         expect(proposal.contextRefs[0].relevance).toBe(1.0);
         expect(proposal.contextRefs[1].relevance).toBe(0.9);
@@ -428,10 +430,9 @@ describe('Agent SDK', () => {
     describe('submit', () => {
       it('should submit a draft proposal', async () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
 
         const result = await decisionAPI.submit(proposal.id);
 
@@ -447,10 +448,9 @@ describe('Agent SDK', () => {
 
       it('should throw for non-draft proposal', async () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
 
         await decisionAPI.submit(proposal.id);
 
@@ -482,10 +482,9 @@ describe('Agent SDK', () => {
         decisionAPI.setEvaluator(mockEvaluator);
 
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('FORBIDDEN').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('FORBIDDEN').build(), [
+          context,
+        ]);
 
         const result = await decisionAPI.submit(proposal.id);
 
@@ -516,10 +515,9 @@ describe('Agent SDK', () => {
         decisionAPI.setEvaluator(mockEvaluator);
 
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('SENSITIVE').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('SENSITIVE').build(), [
+          context,
+        ]);
 
         const result = await decisionAPI.submit(proposal.id);
 
@@ -532,10 +530,9 @@ describe('Agent SDK', () => {
     describe('execute', () => {
       it('should execute an approved proposal', async () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
         await decisionAPI.submit(proposal.id);
 
         const result = await decisionAPI.execute(proposal.id);
@@ -546,10 +543,9 @@ describe('Agent SDK', () => {
 
       it('should fail to execute non-approved proposal', async () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
 
         const result = await decisionAPI.execute(proposal.id);
 
@@ -561,10 +557,9 @@ describe('Agent SDK', () => {
     describe('getProposal', () => {
       it('should retrieve a proposal by ID', () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const created = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const created = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
 
         const retrieved = decisionAPI.getProposal(created.id);
 
@@ -606,10 +601,9 @@ describe('Agent SDK', () => {
     describe('withdraw', () => {
       it('should withdraw a proposal', () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
 
         const result = decisionAPI.withdraw(proposal.id);
 
@@ -619,14 +613,15 @@ describe('Agent SDK', () => {
 
       it('should not withdraw an executed proposal', async () => {
         const context = contextAPI.declareUserInput({ test: true });
-        const proposal = decisionAPI.propose(
-          decisionAPI.action().withType('TEST').build(),
-          [context]
-        );
+        const proposal = decisionAPI.propose(decisionAPI.action().withType('TEST').build(), [
+          context,
+        ]);
         await decisionAPI.submit(proposal.id);
         await decisionAPI.execute(proposal.id);
 
-        expect(() => decisionAPI.withdraw(proposal.id)).toThrow('Cannot withdraw an executed proposal');
+        expect(() => decisionAPI.withdraw(proposal.id)).toThrow(
+          'Cannot withdraw an executed proposal'
+        );
       });
     });
 

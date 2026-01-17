@@ -104,11 +104,7 @@ describe('Full Workflow Integration', () => {
 
       // Step 2: Propose a dangerous action
       const proposal = sdk.decision.propose(
-        sdk.decision
-          .action()
-          .withType('DELETE_FILE')
-          .withParam('path', '/etc/passwd')
-          .build(),
+        sdk.decision.action().withType('DELETE_FILE').withParam('path', '/etc/passwd').build(),
         [userInput],
         'User requested to delete a system file'
       );
@@ -210,10 +206,9 @@ describe('Full Workflow Integration', () => {
     it('should allow cancellation before commitment', async () => {
       // Declare context and propose
       const userInput = sdk.context.declareUserInput({ request: 'Test action' }, 'test');
-      const proposal = sdk.decision.propose(
-        sdk.decision.action().withType('TEST').build(),
-        [userInput]
-      );
+      const proposal = sdk.decision.propose(sdk.decision.action().withType('TEST').build(), [
+        userInput,
+      ]);
 
       // Create decision
       const decision = await decisionStateMachine.propose({
@@ -244,11 +239,7 @@ describe('Full Workflow Integration', () => {
 
       // Propose action
       const proposal = sdk.decision.propose(
-        sdk.decision
-          .action()
-          .withType('CREATE_DOCUMENT')
-          .withParam('name', 'report.pdf')
-          .build(),
+        sdk.decision.action().withType('CREATE_DOCUMENT').withParam('name', 'report.pdf').build(),
         [userInput]
       );
 
@@ -379,7 +370,8 @@ function createBlockSystemFilesPolicy(): PolicyDefinition {
     rule: {
       format: 'javascript',
       // Policy passes when NOT deleting system files; fails (blocks) when deleting /etc files
-      expression: '!(decision.type === "DELETE_FILE" && extra.path && extra.path.startsWith("/etc"))',
+      expression:
+        '!(decision.type === "DELETE_FILE" && extra.path && extra.path.startsWith("/etc"))',
       explanation: 'System files cannot be deleted',
     },
     enforcement: 'BLOCK',
